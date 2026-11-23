@@ -145,6 +145,23 @@ class _Jam3eyaCard extends StatelessWidget {
                         ),
                       ),
                     ),
+                    IconButton(
+                      visualDensity: VisualDensity.compact,
+                      tooltip: jam3eya.remindAt == null
+                          ? 'تذكير بميعاد القسط'
+                          : 'تذكير يوم ${fmtDay(jam3eya.remindAt!)}',
+                      icon: Icon(
+                        jam3eya.remindAt == null
+                            ? Icons.notifications_none
+                            : Icons.notifications_active,
+                        size: 20,
+                        color: jam3eya.remindAt == null
+                            ? Colors.grey[500]
+                            : AppColors.gold,
+                      ),
+                      onPressed: () =>
+                          _pickJam3eyaReminder(context, store, jam3eya),
+                    ),
                     Container(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 10,
@@ -196,6 +213,12 @@ class _Jam3eyaCard extends StatelessWidget {
                       Icons.payments_outlined,
                       'القسط: ${fmtMoney(jam3eya.monthlyAmount)}',
                     ),
+                    if (jam3eya.remindAt != null && !jam3eya.isComplete)
+                      InfoChip(
+                        Icons.notifications_active,
+                        'تذكير ${fmtDay(jam3eya.remindAt!)}',
+                        color: AppColors.gold,
+                      ),
                     InfoChip(
                       Icons.calendar_month_outlined,
                       '${jam3eya.monthsCount} شهور',
@@ -215,6 +238,64 @@ class _Jam3eyaCard extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+/// اختيار/تغيير/إلغاء يوم التذكير بقسط الجمعية
+Future<void> _pickJam3eyaReminder(
+  BuildContext context,
+  WalletStore store,
+  Jam3eya j,
+) async {
+  final now = DateTime.now();
+  final today = DateTime(now.year, now.month, now.day);
+  if (j.remindAt != null) {
+    final action = await showDialog<String>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('تذكير القسط 🔔'),
+        content: Text(
+          'هفكرك بقسط جمعية "${j.name}" يوم ${fmtDay(j.remindAt!)}.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, 'clear'),
+            child: const Text('إلغاء التذكير'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, 'close'),
+            child: const Text('سيبه زي ما هو'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(ctx, 'change'),
+            child: const Text('غير الميعاد'),
+          ),
+        ],
+      ),
+    );
+    if (action == 'clear') {
+      store.setJam3eyaReminder(j.id, null);
+      return;
+    }
+    if (action != 'change') return;
+  }
+  if (!context.mounted) return;
+  final picked = await showDatePicker(
+    context: context,
+    initialDate: j.remindAt ?? today.add(const Duration(days: 1)),
+    firstDate: today,
+    lastDate: today.add(const Duration(days: 365 * 5)),
+    helpText: 'فكرني بقسط الجمعية يوم',
+  );
+  if (picked != null) {
+    store.setJam3eyaReminder(j.id, picked);
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('هفكرك بقسط "${j.name}" يوم ${fmtDay(picked)} 🔔'),
+        ),
+      );
+    }
   }
 }
 

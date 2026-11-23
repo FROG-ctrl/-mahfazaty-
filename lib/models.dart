@@ -11,8 +11,10 @@ class WalletTx {
     required this.category,
     this.note = '',
     DateTime? date,
+    DateTime? addedAt,
   }) : id = id ?? _id(),
-       date = date ?? DateTime.now();
+       date = date ?? DateTime.now(),
+       addedAt = addedAt ?? DateTime.now();
 
   final String id;
   final TxType type;
@@ -21,6 +23,33 @@ class WalletTx {
   final String note;
   final DateTime date;
 
+  /// يوم إضافة العملية فعليًا — التعديل متاح خلال نفس اليوم ده بس
+  final DateTime addedAt;
+
+  /// هل لسه ينفع تتعدل؟ التعديل بيتقفل أول ما يوم الإضافة يعدي
+  bool get isEditableNow {
+    final now = DateTime.now();
+    return addedAt.year == now.year &&
+        addedAt.month == now.month &&
+        addedAt.day == now.day;
+  }
+
+  WalletTx copyWith({
+    TxType? type,
+    double? amount,
+    String? category,
+    String? note,
+    DateTime? date,
+  }) => WalletTx(
+    id: id,
+    type: type ?? this.type,
+    amount: amount ?? this.amount,
+    category: category ?? this.category,
+    note: note ?? this.note,
+    date: date ?? this.date,
+    addedAt: addedAt,
+  );
+
   Map<String, dynamic> toJson() => {
     'id': id,
     'type': type.name,
@@ -28,6 +57,7 @@ class WalletTx {
     'category': category,
     'note': note,
     'date': date.toIso8601String(),
+    'addedAt': addedAt.toIso8601String(),
   };
 
   factory WalletTx.fromJson(Map<String, dynamic> j) => WalletTx(
@@ -37,6 +67,10 @@ class WalletTx {
     category: j['category'] as String,
     note: (j['note'] as String?) ?? '',
     date: DateTime.parse(j['date'] as String),
+    // العمليات القديمة اللي معندهاش addedAt: بنعتبرها اتضافت يوم تاريخها
+    addedAt: j['addedAt'] != null
+        ? DateTime.parse(j['addedAt'] as String)
+        : DateTime.parse(j['date'] as String),
   );
 }
 
@@ -53,6 +87,7 @@ class Debt {
     DateTime? date,
     this.settled = false,
     this.settledAt,
+    this.remindAt,
   }) : id = id ?? _id(),
        date = date ?? DateTime.now();
 
@@ -65,6 +100,9 @@ class Debt {
   bool settled;
   DateTime? settledAt;
 
+  /// يوم التذكير بتسديد الدين (اختياري)
+  DateTime? remindAt;
+
   Map<String, dynamic> toJson() => {
     'id': id,
     'person': person,
@@ -74,6 +112,7 @@ class Debt {
     'date': date.toIso8601String(),
     'settled': settled,
     'settledAt': settledAt?.toIso8601String(),
+    'remindAt': remindAt?.toIso8601String(),
   };
 
   factory Debt.fromJson(Map<String, dynamic> j) => Debt(
@@ -86,6 +125,9 @@ class Debt {
     settled: (j['settled'] as bool?) ?? false,
     settledAt: j['settledAt'] != null
         ? DateTime.parse(j['settledAt'] as String)
+        : null,
+    remindAt: j['remindAt'] != null
+        ? DateTime.parse(j['remindAt'] as String)
         : null,
   );
 }
@@ -102,6 +144,7 @@ class Jam3eya {
     required this.receiveMonthIndex,
     List<bool>? paidMonths,
     this.received = false,
+    this.remindAt,
   }) : id = id ?? _id(),
        paidMonths = paidMonths ?? List<bool>.filled(monthsCount, false);
 
@@ -116,6 +159,9 @@ class Jam3eya {
   final int receiveMonthIndex;
   final List<bool> paidMonths;
   bool received;
+
+  /// يوم التذكير بقسط الجمعية (اختياري)
+  DateTime? remindAt;
 
   /// إجمالي اللي هتقبضه لما ييجي دورك
   double get totalPot => monthlyAmount * monthsCount;
@@ -153,6 +199,7 @@ class Jam3eya {
     'receiveMonthIndex': receiveMonthIndex,
     'paidMonths': paidMonths,
     'received': received,
+    'remindAt': remindAt?.toIso8601String(),
   };
 
   factory Jam3eya.fromJson(Map<String, dynamic> j) => Jam3eya(
@@ -167,5 +214,8 @@ class Jam3eya {
         .map((e) => e as bool)
         .toList(),
     received: (j['received'] as bool?) ?? false,
+    remindAt: j['remindAt'] != null
+        ? DateTime.parse(j['remindAt'] as String)
+        : null,
   );
 }

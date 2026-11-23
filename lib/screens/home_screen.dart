@@ -409,6 +409,28 @@ class _TxTile extends StatelessWidget {
           ),
           IconButton(
             visualDensity: VisualDensity.compact,
+            tooltip: tx.isEditableNow
+                ? 'تعديل'
+                : 'التعديل متاح في يوم إضافة العملية بس',
+            icon: Icon(
+              tx.isEditableNow ? Icons.edit_outlined : Icons.lock_outline,
+              size: 19,
+              color: tx.isEditableNow ? Colors.grey[600] : Colors.grey[350],
+            ),
+            onPressed: () {
+              if (tx.isEditableNow) {
+                showEditTransactionSheet(context, store, tx);
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('مينفعش تعديل عمليات يوم سابق'),
+                  ),
+                );
+              }
+            },
+          ),
+          IconButton(
+            visualDensity: VisualDensity.compact,
             icon: Icon(Icons.delete_outline, size: 19, color: Colors.grey[400]),
             onPressed: () => store.deleteTx(tx.id),
           ),

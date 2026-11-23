@@ -3,6 +3,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
 import 'auth/auth_service.dart';
+import 'notifications.dart';
 import 'screens/splash_screen.dart';
 import 'store.dart';
 import 'theme.dart';
@@ -13,6 +14,8 @@ Future<void> main() async {
   final store = WalletStore();
   await store.load();
   await AuthService.instance.init();
+  await ReminderService.instance.init();
+  await ReminderService.instance.syncFromStore(store.debts, store.jam3eyat);
   runApp(MahfazatyApp(store: store));
 }
 

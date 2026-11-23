@@ -23,11 +23,39 @@ void showAddTransactionSheet(
   );
 }
 
+/// فتح شيت تعديل عملية موجودة (متاح في يوم إضافتها بس — بيتقفل بعدها)
+void showEditTransactionSheet(
+  BuildContext context,
+  WalletStore store,
+  WalletTx tx,
+) {
+  showModalBottomSheet<void>(
+    context: context,
+    isScrollControlled: true,
+    showDragHandle: true,
+    builder: (ctx) => Padding(
+      padding: EdgeInsets.only(bottom: MediaQuery.of(ctx).viewInsets.bottom),
+      child: _AddTransactionSheet(
+        store: store,
+        initialType: tx.type,
+        existing: tx,
+      ),
+    ),
+  );
+}
+
 class _AddTransactionSheet extends StatefulWidget {
-  const _AddTransactionSheet({required this.store, required this.initialType});
+  const _AddTransactionSheet({
+    required this.store,
+    required this.initialType,
+    this.existing,
+  });
 
   final WalletStore store;
   final TxType initialType;
+
+  /// لو موجود يبقى وضع تعديل عملية قديمة
+  final WalletTx? existing;
 
   @override
   State<_AddTransactionSheet> createState() => _AddTransactionSheetState();
@@ -40,6 +68,22 @@ class _AddTransactionSheetState extends State<_AddTransactionSheet> {
   final _note = TextEditingController();
   DateTime _date = DateTime.now();
   String? _error;
+
+  bool get _isEditing => widget.existing != null;
+
+  @override
+  void initState() {
+    super.initState();
+    final ex = widget.existing;
+    if (ex != null) {
+      _amount.text = ex.amount == ex.amount.roundToDouble()
+          ? ex.amount.toStringAsFixed(0)
+          : ex.amount.toString();
+      _category.text = ex.category;
+      _note.text = ex.note;
+      _date = ex.date;
+    }
+  }
 
   @override
   void dispose() {
@@ -55,15 +99,33 @@ class _AddTransactionSheetState extends State<_AddTransactionSheet> {
       setState(() => _error = 'اكتب مبلغ صحيح');
       return;
     }
-    widget.store.addTx(
-      WalletTx(
-        type: _type,
-        amount: amount,
-        category: _category.text.trim(),
-        note: _note.text.trim(),
-        date: _date,
-      ),
-    );
+    final ex = widget.existing;
+    if (ex != null) {
+      // القفل اليومي: لو يوم الإضافة عدّى والشيت لسه مفتوح، ارفض التعديل
+      if (!ex.isEditableNow) {
+        setState(() => _error = 'مينفعش تعديل عمليات يوم سابق');
+        return;
+      }
+      widget.store.updateTx(
+        ex.copyWith(
+          type: _type,
+          amount: amount,
+          category: _category.text.trim(),
+          note: _note.text.trim(),
+          date: _date,
+        ),
+      );
+    } else {
+      widget.store.addTx(
+        WalletTx(
+          type: _type,
+          amount: amount,
+          category: _category.text.trim(),
+          note: _note.text.trim(),
+          date: _date,
+        ),
+      );
+    }
     Navigator.of(context).pop();
     showSuccessOverlay(context);
   }
@@ -177,7 +239,11 @@ class _AddTransactionSheetState extends State<_AddTransactionSheet> {
             onPressed: _save,
             style: FilledButton.styleFrom(backgroundColor: color),
             child: Text(
-              isExpense ? 'سجل المصروف' : 'سجل الدخل',
+              _isEditing
+                  ? 'حفظ التعديل'
+                  : isExpense
+                  ? 'سجل المصروف'
+                  : 'سجل الدخل',
               style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
             ),
           ),

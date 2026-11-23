@@ -228,6 +228,8 @@ class _DebtCard extends StatelessWidget {
               [
                 fmtDay(debt.date),
                 if (debt.note.isNotEmpty) debt.note,
+                if (debt.remindAt != null && !debt.settled)
+                  '🔔 ${fmtDay(debt.remindAt!)}',
                 if (debt.settled) 'اتسدت',
               ].join(' • '),
               style: TextStyle(fontSize: 12, color: Colors.grey[600]),
@@ -249,11 +251,37 @@ class _DebtCard extends StatelessWidget {
                     color: Colors.grey[500],
                     size: 20,
                   ),
-                  onSelected: (v) {
+                  onSelected: (v) async {
                     if (v == 'settle') {
                       store.toggleDebtSettled(debt.id);
                     } else if (v == 'delete') {
                       store.deleteDebt(debt.id);
+                    } else if (v == 'remind') {
+                      final now = DateTime.now();
+                      final today = DateTime(now.year, now.month, now.day);
+                      final picked = await showDatePicker(
+                        context: context,
+                        initialDate:
+                            debt.remindAt ??
+                            today.add(const Duration(days: 1)),
+                        firstDate: today,
+                        lastDate: today.add(const Duration(days: 365 * 5)),
+                        helpText: 'فكرني بالتسديد يوم',
+                      );
+                      if (picked != null) {
+                        store.setDebtReminder(debt.id, picked);
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                'هفكرك بالتسديد يوم ${fmtDay(picked)} 🔔',
+                              ),
+                            ),
+                          );
+                        }
+                      }
+                    } else if (v == 'unremind') {
+                      store.setDebtReminder(debt.id, null);
                     }
                   },
                   itemBuilder: (_) => [
@@ -263,6 +291,20 @@ class _DebtCard extends StatelessWidget {
                         debt.settled ? 'رجعها غير مسددة' : 'تم التسديد ✅',
                       ),
                     ),
+                    if (!debt.settled)
+                      PopupMenuItem(
+                        value: 'remind',
+                        child: Text(
+                          debt.remindAt == null
+                              ? 'تذكير بالتسديد 🔔'
+                              : 'تغيير ميعاد التذكير 🔔',
+                        ),
+                      ),
+                    if (debt.remindAt != null)
+                      const PopupMenuItem(
+                        value: 'unremind',
+                        child: Text('إلغاء التذكير 🔕'),
+                      ),
                     const PopupMenuItem(
                       value: 'delete',
                       child: Text('امسح 🗑'),

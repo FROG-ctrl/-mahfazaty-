@@ -1,9 +1,11 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'models.dart';
+import 'notifications.dart';
 
 class WalletStore extends ChangeNotifier {
   static const _kTxs = 'mahfazaty_txs';
@@ -51,12 +53,24 @@ class WalletStore extends ChangeNotifier {
       _kJam3eyat,
       jsonEncode(jam3eyat.map((e) => e.toJson()).toList()),
     );
+    // أي تعديل بيأثر على التذكيرات: راجع جدولة الإشعارات
+    unawaited(ReminderService.instance.syncFromStore(debts, jam3eyat));
   }
 
   // ---------- العمليات ----------
 
   void addTx(WalletTx tx) {
     txs.insert(0, tx);
+    txs.sort((a, b) => b.date.compareTo(a.date));
+    _save();
+    notifyListeners();
+  }
+
+  /// تعديل عملية موجودة (القفل اليومي بيتفرض من الواجهة ومن الشيت)
+  void updateTx(WalletTx updated) {
+    final i = txs.indexWhere((t) => t.id == updated.id);
+    if (i < 0) return;
+    txs[i] = updated;
     txs.sort((a, b) => b.date.compareTo(a.date));
     _save();
     notifyListeners();
@@ -169,6 +183,14 @@ class WalletStore extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// تحديد/إلغاء يوم التذكير بتسديد الدين
+  void setDebtReminder(String id, DateTime? date) {
+    final d = debts.firstWhere((e) => e.id == id);
+    d.remindAt = date;
+    _save();
+    notifyListeners();
+  }
+
   void deleteDebt(String id) {
     debts.removeWhere((d) => d.id == id);
     _save();
@@ -201,6 +223,14 @@ class WalletStore extends ChangeNotifier {
   void toggleJam3eyaReceived(String id) {
     final j = jam3eyat.firstWhere((e) => e.id == id);
     j.received = !j.received;
+    _save();
+    notifyListeners();
+  }
+
+  /// تحديد/إلغاء يوم التذكير بقسط الجمعية
+  void setJam3eyaReminder(String id, DateTime? date) {
+    final j = jam3eyat.firstWhere((e) => e.id == id);
+    j.remindAt = date;
     _save();
     notifyListeners();
   }
