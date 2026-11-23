@@ -67,7 +67,7 @@ class Jam3eyatScreen extends StatelessWidget {
                                 : 'بتدفع ${fmtMoney(store.activeJam3eyatMonthly)} كل شهر',
                             style: TextStyle(
                               fontSize: 12.5,
-                              color: Colors.grey[600],
+                              color: AppColors.muted,
                             ),
                           ),
                         ],
@@ -158,7 +158,7 @@ class _Jam3eyaCard extends StatelessWidget {
                             : Icons.notifications_active,
                         size: 20,
                         color: jam3eya.remindAt == null
-                            ? Colors.grey[500]
+                            ? AppColors.muted
                             : AppColors.gold,
                       ),
                       onPressed: () =>
@@ -204,7 +204,7 @@ class _Jam3eyaCard extends StatelessWidget {
                 AppText(
                   'دفعت ${jam3eya.paidCount} من ${jam3eya.monthsCount} شهر'
                   '${current != null && !jam3eya.isComplete ? ' • إحنا في الشهر $current' : ''}',
-                  style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                  style: TextStyle(fontSize: 12, color: AppColors.muted),
                 ),
                 SizedBox(height: 12),
                 Wrap(
@@ -336,7 +336,7 @@ class _Jam3eyaDetails extends StatelessWidget {
           AppText(
             'بدأت ${fmtMonth(j.monthDate(1))} • القسط ${fmtMoney(j.monthlyAmount)} • الإجمالي ${fmtMoney(j.totalPot)}',
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 12.5, color: Colors.grey[600]),
+            style: TextStyle(fontSize: 12.5, color: AppColors.muted),
           ),
           SizedBox(height: 10),
           Row(
@@ -419,7 +419,7 @@ class _Jam3eyaDetails extends StatelessWidget {
                           fontSize: 10.5,
                           color: paid
                               ? Colors.white.withValues(alpha: 0.9)
-                              : Colors.grey[600],
+                              : AppColors.muted,
                         ),
                       ),
                     ],
@@ -432,7 +432,7 @@ class _Jam3eyaDetails extends StatelessWidget {
           AppText(
             'دوس على الشهر لما تدفع قسطه',
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 12, color: Colors.grey[500]),
+            style: TextStyle(fontSize: 12, color: AppColors.muted),
           ),
           SizedBox(height: 16),
           FilledButton.icon(

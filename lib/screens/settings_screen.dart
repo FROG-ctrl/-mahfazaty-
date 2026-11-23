@@ -57,17 +57,24 @@ class SettingsScreen extends StatelessWidget {
     final name = s.profileName.isNotEmpty
         ? s.profileName
         : auth.displayName ?? (en ? 'Guest' : 'ضيف');
+    final ids = ['white', 'black', 'green', 'purple', 'blue', 'orange'];
     final names = en
-        ? ['Green', 'Blue', 'Orange', 'Purple', 'White', 'Black']
-        : ['أخضر', 'أزرق', 'برتقالي', 'بنفسجي', 'أبيض', 'أسود'];
-    final colors = [
-      Color(0xFF0E7C66),
-      Color(0xFF245BB5),
-      Color(0xFFAE4C13),
-      Color(0xFF7750A8),
-      Colors.white,
-      Color(0xFF101317),
-    ];
+        ? [
+            'White',
+            'Black',
+            'Forest & Gold',
+            'Purple & Rose',
+            'Navy & Copper',
+            'Terracotta & Sage',
+          ]
+        : [
+            'أبيض',
+            'أسود',
+            'أخضر وذهبي',
+            'بنفسجي ووردي',
+            'كحلي ونحاسي',
+            'طوبي ومريمي',
+          ];
     return SafeArea(
       child: ListView(
         padding: EdgeInsets.fromLTRB(16, 12, 16, 32),
@@ -110,8 +117,8 @@ class SettingsScreen extends StatelessWidget {
           SizedBox(height: 6),
           Text(
             en
-                ? 'Four colors, plus white and black. Your choice is saved.'
-                : '٤ ألوان، ومعاهم الأبيض والأسود. اختيارك بيفضل محفوظ.',
+                ? 'Six coordinated palettes. Your choice is saved.'
+                : '٦ توليفات متناسقة للخلفية والكروت والأزرار. اختيارك محفوظ.',
           ),
           SizedBox(height: 12),
           GridView.builder(
@@ -122,10 +129,11 @@ class SettingsScreen extends StatelessWidget {
               crossAxisCount: 3,
               crossAxisSpacing: 10,
               mainAxisSpacing: 10,
-              childAspectRatio: 1.25,
+              childAspectRatio: 1.05,
             ),
             itemBuilder: (context, i) {
-              final id = AppSettings.themeIds[i];
+              final id = ids[i];
+              final palette = WalletPalette.all[id]!;
               final selected = s.themeId == id;
               return Semantics(
                 selected: selected,
@@ -150,18 +158,24 @@ class SettingsScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Container(
-                          width: 30,
+                          width: 54,
                           height: 30,
                           decoration: BoxDecoration(
-                            color: colors[i],
-                            shape: BoxShape.circle,
+                            gradient: LinearGradient(
+                              colors: id == 'white'
+                                  ? [Colors.white, Color(0xFFDEE3E7)]
+                                  : [palette.primary, palette.accent],
+                            ),
+                            borderRadius: BorderRadius.circular(10),
                             border: Border.all(color: Colors.grey),
                           ),
                           child: selected
                               ? Icon(
                                   Icons.check,
                                   size: 21,
-                                  color: i == 4 ? Colors.black : Colors.white,
+                                  color: id == 'white'
+                                      ? Colors.black
+                                      : Colors.white,
                                 )
                               : null,
                         ),
@@ -232,7 +246,7 @@ class SettingsScreen extends StatelessWidget {
           SizedBox(height: 20),
           Center(
             child: Text(
-              en ? 'Mahfazaty · 1.4.0' : 'محفظتي · 1.4.0',
+              en ? 'Mahfazaty · 1.5.0' : 'محفظتي · 1.5.0',
               style: Theme.of(context).textTheme.bodySmall,
             ),
           ),

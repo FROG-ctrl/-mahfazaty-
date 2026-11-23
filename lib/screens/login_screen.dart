@@ -160,7 +160,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   AppText(
                     'سجل دخولك عشان تكمل',
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+                    style: TextStyle(fontSize: 14, color: AppColors.muted),
                   ),
                   SizedBox(height: 22),
                   if (!firebaseReady) ...[
@@ -183,7 +183,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               style: TextStyle(
                                 fontSize: 12.5,
                                 height: 1.6,
-                                color: Colors.grey[800],
+                                color: AppColors.muted,
                               ),
                             ),
                           ),
@@ -284,7 +284,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     children: [
                       AppText(
                         'ماعندكش حساب؟',
-                        style: TextStyle(color: Colors.grey[700]),
+                        style: TextStyle(color: AppColors.muted),
                       ),
                       TextButton(
                         onPressed: firebaseReady ? _openSignup : null,
@@ -303,7 +303,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         padding: EdgeInsets.symmetric(horizontal: 10),
                         child: AppText(
                           'أو',
-                          style: TextStyle(color: Colors.grey[500]),
+                          style: TextStyle(color: AppColors.muted),
                         ),
                       ),
                       Expanded(child: Divider(color: Colors.grey[300])),

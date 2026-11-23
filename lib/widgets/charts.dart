@@ -51,7 +51,10 @@ class _WeeklyBarsPainter extends CustomPainter {
           end: Alignment.bottomCenter,
           colors: isMax
               ? [AppColors.gold, AppColors.gold.withValues(alpha: 0.55)]
-              : [AppColors.teal, AppColors.emerald.withValues(alpha: 0.55)],
+              : [
+                  AppColors.gold.withValues(alpha: .65),
+                  AppColors.gold.withValues(alpha: .35),
+                ],
         ).createShader(rect.outerRect);
       canvas.drawRRect(rect, paint);
 
@@ -62,7 +65,7 @@ class _WeeklyBarsPainter extends CustomPainter {
             fontFamily: 'Cairo',
             fontSize: 11.5,
             fontWeight: isMax ? FontWeight.w800 : FontWeight.w500,
-            color: isMax ? AppColors.emeraldDark : Colors.grey[600],
+            color: isMax ? AppColors.ink : AppColors.muted,
           ),
         ),
         textDirection: ui.TextDirection.rtl,
@@ -210,7 +213,7 @@ class _MonthlyBarsPainter extends CustomPainter {
           style: TextStyle(
             fontFamily: 'Cairo',
             fontSize: 11,
-            color: Colors.grey[600],
+            color: AppColors.muted,
           ),
         ),
         textDirection: ui.TextDirection.rtl,

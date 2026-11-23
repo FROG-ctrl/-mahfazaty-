@@ -285,7 +285,7 @@ class _TypeButton extends StatelessWidget {
         child: AppText(
           label,
           style: TextStyle(
-            color: selected ? Colors.white : Colors.grey[700],
+            color: selected ? Colors.white : AppColors.muted,
             fontWeight: FontWeight.w700,
           ),
         ),

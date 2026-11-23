@@ -55,7 +55,7 @@ class StatsScreen extends StatelessWidget {
                                     'إجمالي الشهر',
                                     style: TextStyle(
                                       fontSize: 12,
-                                      color: Colors.grey[600],
+                                      color: AppColors.muted,
                                     ),
                                   ),
                                   AppText(
@@ -102,7 +102,7 @@ class StatsScreen extends StatelessWidget {
                                   '${pct.toStringAsFixed(0)}%',
                                   style: TextStyle(
                                     fontSize: 12,
-                                    color: Colors.grey[600],
+                                    color: AppColors.muted,
                                   ),
                                 ),
                                 SizedBox(width: 8),

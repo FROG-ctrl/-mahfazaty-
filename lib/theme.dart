@@ -1,66 +1,133 @@
 import 'package:flutter/material.dart';
 import 'settings.dart';
 
+/// Paired palettes keep the same stored IDs so an update keeps each selection.
+class WalletPalette {
+  const WalletPalette(
+    this.primary,
+    this.accent,
+    this.background,
+    this.surface,
+    this.input,
+    this.ink,
+    this.heroEnd,
+  );
+  final Color primary, accent, background, surface, input, ink, heroEnd;
+  static const all = <String, WalletPalette>{
+    'green': WalletPalette(
+      Color(0xFF28775E),
+      Color(0xFFD9B65B),
+      Color(0xFF123A30),
+      Color(0xFF1D4D3F),
+      Color(0xFF285C4D),
+      Color(0xFFF1EEDC),
+      Color(0xFF8C6D25),
+    ),
+    'purple': WalletPalette(
+      Color(0xFF795397),
+      Color(0xFFE3A1B7),
+      Color(0xFF30213E),
+      Color(0xFF483054),
+      Color(0xFF583C66),
+      Color(0xFFF6EAF4),
+      Color(0xFF97566F),
+    ),
+    'blue': WalletPalette(
+      Color(0xFF35678A),
+      Color(0xFFE1AB89),
+      Color(0xFF172E43),
+      Color(0xFF24455F),
+      Color(0xFF315671),
+      Color(0xFFEAF0F6),
+      Color(0xFF8C5A45),
+    ),
+    'orange': WalletPalette(
+      Color(0xFFA55A3C),
+      Color(0xFFB4C8A3),
+      Color(0xFF543329),
+      Color(0xFF704737),
+      Color(0xFF835541),
+      Color(0xFFF6EAD8),
+      Color(0xFF4B6B53),
+    ),
+    'white': WalletPalette(
+      Color(0xFF38434E),
+      Color(0xFF687580),
+      Color(0xFFF5F6F7),
+      Color(0xFFFFFFFF),
+      Color(0xFFEBEEF0),
+      Color(0xFF202830),
+      Color(0xFF596772),
+    ),
+    'black': WalletPalette(
+      Color(0xFF4F5B68),
+      Color(0xFFABB6C2),
+      Color(0xFF101214),
+      Color(0xFF1C2024),
+      Color(0xFF292F35),
+      Color(0xFFF1F3F5),
+      Color(0xFF333C46),
+    ),
+  };
+  static WalletPalette get current =>
+      all[AppSettings.instance.themeId] ?? all['green']!;
+}
+
 class AppColors {
-  static Color get emerald => switch (AppSettings.instance.themeId) {
-    'blue' => const Color(0xFF245BB5),
-    'orange' => const Color(0xFFAE4C13),
-    'purple' => const Color(0xFF7750A8),
-    'white' => const Color(0xFF34434C),
-    'black' => const Color(0xFF718DAA),
-    _ => const Color(0xFF0E7C66),
-  };
-  static Color get emeraldDark => Color.lerp(emerald, Colors.black, 0.32)!;
-  static Color get teal => Color.lerp(emerald, Colors.white, 0.16)!;
-  static Color get gold => switch (AppSettings.instance.themeId) {
-    'blue' => const Color(0xFF3B77C0),
-    'orange' => const Color(0xFFB76621),
-    'purple' => const Color(0xFF8D65BA),
-    'white' => const Color(0xFF5A6871),
-    'black' => const Color(0xFF94ADC6),
-    _ => const Color(0xFFE3A93B),
-  };
-  static const income = Color(0xFF1E9E6A);
-  static const expense = Color(0xFFD64545);
-  static Color get bg => AppSettings.instance.themeId == 'black'
-      ? const Color(0xFF101317)
-      : const Color(0xFFF3F6F5);
-  static Color get ink => AppSettings.instance.themeId == 'black'
-      ? const Color(0xFFF2F3F5)
-      : const Color(0xFF17201D);
+  static Color get emerald => WalletPalette.current.primary;
+  static Color get emeraldDark => Color.lerp(emerald, Colors.black, 0.24)!;
+  static Color get teal => Color.lerp(emerald, Colors.white, 0.08)!;
+  static Color get gold => WalletPalette.current.accent;
+  static List<Color> get heroGradient => [
+    emerald,
+    WalletPalette.current.heroEnd,
+  ];
+  static Color get income => AppSettings.instance.themeId == 'white'
+      ? const Color(0xFF1E9E6A)
+      : const Color(0xFF73D3A8);
+  static Color get expense => AppSettings.instance.themeId == 'white'
+      ? const Color(0xFFD64545)
+      : const Color(0xFFFFA69B);
+  static Color get muted => ink.withValues(alpha: .72);
+  static Color get bg => WalletPalette.current.background;
+  static Color get ink => WalletPalette.current.ink;
 }
 
 class AppTheme {
   static ThemeData get light {
-    final dark = AppSettings.instance.themeId == 'black';
+    final p = WalletPalette.current;
+    final dark = AppSettings.instance.themeId != 'white';
     final scheme = ColorScheme.fromSeed(
       brightness: dark ? Brightness.dark : Brightness.light,
-      seedColor: AppColors.emerald,
-      primary: dark ? const Color(0xFFB2CBE1) : AppColors.emerald,
-      secondary: AppColors.gold,
-      surface: dark ? const Color(0xFF1B2026) : Colors.white,
+      seedColor: p.primary,
+      primary: dark ? Color.lerp(p.primary, p.ink, .6)! : p.primary,
+      secondary: p.accent,
+      surface: p.surface,
+      onSurface: p.ink,
+      secondaryContainer: p.accent.withValues(alpha: .18),
+      onSecondaryContainer: p.ink,
     );
     return ThemeData(
       useMaterial3: true,
       brightness: scheme.brightness,
       colorScheme: scheme,
       fontFamily: 'Cairo',
-      scaffoldBackgroundColor: AppColors.bg,
+      scaffoldBackgroundColor: p.background,
       appBarTheme: AppBarTheme(
         centerTitle: true,
         backgroundColor: Colors.transparent,
         elevation: 0,
-        foregroundColor: AppColors.ink,
+        foregroundColor: p.ink,
       ),
       cardTheme: CardThemeData(
-        color: scheme.surface,
+        color: p.surface,
         elevation: 0,
         margin: EdgeInsets.zero,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       ),
       filledButtonTheme: FilledButtonThemeData(
         style: FilledButton.styleFrom(
-          backgroundColor: AppColors.emerald,
+          backgroundColor: p.primary,
           foregroundColor: Colors.white,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(14),
@@ -68,9 +135,13 @@ class AppTheme {
           padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 20),
         ),
       ),
+      floatingActionButtonTheme: FloatingActionButtonThemeData(
+        backgroundColor: p.primary,
+        foregroundColor: Colors.white,
+      ),
       navigationBarTheme: NavigationBarThemeData(
-        backgroundColor: scheme.surface,
-        indicatorColor: scheme.primary.withValues(alpha: 0.14),
+        backgroundColor: p.surface,
+        indicatorColor: p.accent.withValues(alpha: dark ? .22 : .18),
         labelTextStyle: const WidgetStatePropertyAll(
           TextStyle(
             fontFamily: 'Cairo',
@@ -81,7 +152,7 @@ class AppTheme {
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: dark ? const Color(0xFF262D35) : const Color(0xFFF1F4F3),
+        fillColor: p.input,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14),
           borderSide: BorderSide.none,

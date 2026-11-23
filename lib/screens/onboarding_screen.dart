@@ -112,7 +112,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 child: AppText(
                   'تخطي',
                   style: TextStyle(
-                    color: _isLast ? Colors.transparent : Colors.grey[600],
+                    color: _isLast ? Colors.transparent : AppColors.muted,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
@@ -147,7 +147,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           style: TextStyle(
                             fontSize: 14.5,
                             height: 1.7,
-                            color: Colors.grey[700],
+                            color: AppColors.muted,
                           ),
                         ),
                       ],

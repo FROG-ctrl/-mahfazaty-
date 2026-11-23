@@ -107,7 +107,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   AppText(
                     'اعمل حسابك وخلي فلوسك تحت السيطرة',
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+                    style: TextStyle(fontSize: 14, color: AppColors.muted),
                   ),
                   SizedBox(height: 18),
                   if (_error != null) ...[

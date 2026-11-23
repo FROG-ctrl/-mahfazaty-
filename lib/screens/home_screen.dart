@@ -75,13 +75,13 @@ class HomeScreen extends StatelessWidget {
                     AuthService.instance.isSignedIn
                         ? Icons.logout
                         : Icons.person_outline,
-                    color: Colors.grey[700],
+                    color: AppColors.muted,
                   ),
                 )
               else
                 Icon(
                   Icons.account_balance_wallet_outlined,
-                  color: Colors.grey[700],
+                  color: AppColors.muted,
                 ),
             ],
           ),
@@ -186,7 +186,7 @@ class _BalanceCard extends StatelessWidget {
         gradient: LinearGradient(
           begin: Alignment.topRight,
           end: Alignment.bottomLeft,
-          colors: [AppColors.teal, AppColors.emerald, AppColors.emeraldDark],
+          colors: AppColors.heroGradient,
         ),
         boxShadow: [
           BoxShadow(
@@ -397,7 +397,7 @@ class _TxTile extends StatelessWidget {
       subtitle: AppText(
         tx.note.isEmpty ? fmtDay(tx.date) : '${tx.note} • ${fmtDay(tx.date)}',
         translate: false,
-        style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+        style: TextStyle(fontSize: 12, color: AppColors.muted),
       ),
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
@@ -418,7 +418,7 @@ class _TxTile extends StatelessWidget {
             icon: Icon(
               tx.isEditableNow ? Icons.edit_outlined : Icons.lock_outline,
               size: 19,
-              color: tx.isEditableNow ? Colors.grey[600] : Colors.grey[350],
+              color: tx.isEditableNow ? AppColors.muted : Colors.grey[350],
             ),
             onPressed: () {
               if (tx.isEditableNow) {

@@ -137,7 +137,7 @@ class _DebtSummaryCard extends StatelessWidget {
             SizedBox(height: 6),
             AppText(
               title,
-              style: TextStyle(fontSize: 11.5, color: Colors.grey[600]),
+              style: TextStyle(fontSize: 11.5, color: AppColors.muted),
             ),
             SizedBox(height: 2),
             AppText(
@@ -231,7 +231,7 @@ class _DebtCard extends StatelessWidget {
                   '🔔 ${fmtDay(debt.remindAt!)}',
                 if (debt.settled) 'اتسدت',
               ].join(' • '),
-              style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+              style: TextStyle(fontSize: 12, color: AppColors.muted),
             ),
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
@@ -245,11 +245,7 @@ class _DebtCard extends StatelessWidget {
                   ),
                 ),
                 PopupMenuButton<String>(
-                  icon: Icon(
-                    Icons.more_vert,
-                    color: Colors.grey[500],
-                    size: 20,
-                  ),
+                  icon: Icon(Icons.more_vert, color: AppColors.muted, size: 20),
                   onSelected: (v) async {
                     if (v == 'settle') {
                       store.toggleDebtSettled(debt.id);
