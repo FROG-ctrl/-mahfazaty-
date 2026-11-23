@@ -1,3 +1,4 @@
+import '../l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
@@ -9,13 +10,13 @@ class SectionTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(4, 20, 4, 10),
+      padding: EdgeInsets.fromLTRB(4, 20, 4, 10),
       child: Row(
         children: [
           Expanded(
-            child: Text(
+            child: AppText(
               title,
-              style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w800),
+              style: TextStyle(fontSize: 17, fontWeight: FontWeight.w800),
             ),
           ),
           if (trailing != null) trailing!,
@@ -45,31 +46,31 @@ class EmptyState extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 32),
+        padding: EdgeInsets.symmetric(vertical: 24, horizontal: 32),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Lottie.asset(lottie, width: 170, repeat: true),
-            const SizedBox(height: 8),
-            Text(
+            SizedBox(height: 8),
+            AppText(
               title,
               textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w700),
+              style: TextStyle(fontSize: 17, fontWeight: FontWeight.w700),
             ),
             if (subtitle != null) ...[
-              const SizedBox(height: 6),
-              Text(
+              SizedBox(height: 6),
+              AppText(
                 subtitle!,
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 13.5, color: Colors.grey[600]),
               ),
             ],
             if (actionLabel != null && onAction != null) ...[
-              const SizedBox(height: 16),
+              SizedBox(height: 16),
               FilledButton.icon(
                 onPressed: onAction,
-                icon: const Icon(Icons.add),
-                label: Text(actionLabel!),
+                icon: Icon(Icons.add),
+                label: AppText(actionLabel!),
               ),
             ],
           ],
@@ -90,7 +91,7 @@ class InfoChip extends StatelessWidget {
   Widget build(BuildContext context) {
     final c = color ?? Theme.of(context).colorScheme.primary;
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
         color: c.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(10),
@@ -99,9 +100,9 @@ class InfoChip extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Icon(icon, size: 15, color: c),
-          const SizedBox(width: 5),
+          SizedBox(width: 5),
           Flexible(
-            child: Text(
+            child: AppText(
               text,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(

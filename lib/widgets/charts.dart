@@ -30,7 +30,7 @@ class _WeeklyBarsPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final maxV = values.fold<double>(0, math.max);
-    const labelH = 22.0;
+    final labelH = 22.0;
     final chartH = size.height - labelH;
     final n = values.length;
     final slot = size.width / n;
@@ -42,7 +42,7 @@ class _WeeklyBarsPainter extends CustomPainter {
       final x = slot * i + (slot - barW) / 2;
       final rect = RRect.fromRectAndRadius(
         Rect.fromLTWH(x, chartH - h, barW, h),
-        const Radius.circular(7),
+        Radius.circular(7),
       );
       final isMax = v == maxV && maxV > 0;
       final paint = Paint()
@@ -85,7 +85,7 @@ class CategoryDonut extends StatelessWidget {
 
   final List<MapEntry<String, double>> entries;
 
-  static const palette = [
+  static final palette = [
     Color(0xFF0E7C66),
     Color(0xFFE3A93B),
     Color(0xFF4E8DD6),
@@ -117,10 +117,10 @@ class _DonutPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final center = size.center(Offset.zero);
     final radius = size.width / 2;
-    const stroke = 26.0;
+    final stroke = 26.0;
     final rect = Rect.fromCircle(center: center, radius: radius - stroke / 2);
     var start = -math.pi / 2;
-    const gap = 0.035;
+    final gap = 0.035;
 
     for (var i = 0; i < entries.length; i++) {
       final sweep = (entries[i].value / total) * math.pi * 2;
@@ -181,7 +181,7 @@ class _MonthlyBarsPainter extends CustomPainter {
       income.fold<double>(0, math.max),
       expense.fold<double>(0, math.max),
     );
-    const labelH = 22.0;
+    final labelH = 22.0;
     final chartH = size.height - labelH;
     final n = income.length;
     final slot = size.width / n;
@@ -194,7 +194,7 @@ class _MonthlyBarsPainter extends CustomPainter {
         final x = slot * i + slot / 2 + (k == 0 ? -barW - 2 : 2);
         final rect = RRect.fromRectAndRadius(
           Rect.fromLTWH(x, chartH - h, barW, h),
-          const Radius.circular(6),
+          Radius.circular(6),
         );
         canvas.drawRRect(
           rect,

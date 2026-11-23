@@ -1,3 +1,4 @@
+import '../l10n.dart';
 import 'package:flutter/material.dart';
 
 import '../auth/auth_service.dart';
@@ -34,7 +35,7 @@ class _LoginScreenState extends State<LoginScreen> {
   void _goHome() {
     Navigator.of(context).pushAndRemoveUntil(
       PageRouteBuilder<void>(
-        transitionDuration: const Duration(milliseconds: 450),
+        transitionDuration: Duration(milliseconds: 450),
         pageBuilder: (_, _, _) => HomeShell(store: widget.store),
         transitionsBuilder: (_, a, _, child) =>
             FadeTransition(opacity: a, child: child),
@@ -97,16 +98,16 @@ class _LoginScreenState extends State<LoginScreen> {
 
   String? _validateEmail(String? v) {
     final value = (v ?? '').trim();
-    if (value.isEmpty) return 'اكتب الإيميل';
+    if (value.isEmpty) return tr('اكتب الإيميل');
     if (!value.contains('@') || !value.contains('.')) {
-      return 'الإيميل ده مش صحيح';
+      return tr('الإيميل ده مش صحيح');
     }
     return null;
   }
 
   String? _validatePassword(String? v) {
-    if ((v ?? '').isEmpty) return 'اكتب كلمة السر';
-    if (v!.length < 6) return 'كلمة السر لازم ٦ حروف على الأقل';
+    if ((v ?? '').isEmpty) return tr('اكتب كلمة السر');
+    if (v!.length < 6) return tr('كلمة السر لازم ٦ حروف على الأقل');
     return null;
   }
 
@@ -117,7 +118,7 @@ class _LoginScreenState extends State<LoginScreen> {
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+            padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
             child: Form(
               key: _formKey,
               child: Column(
@@ -128,7 +129,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       width: 84,
                       height: 84,
                       decoration: BoxDecoration(
-                        gradient: const LinearGradient(
+                        gradient: LinearGradient(
                           begin: Alignment.topRight,
                           end: Alignment.bottomLeft,
                           colors: [AppColors.teal, AppColors.emerald],
@@ -138,33 +139,33 @@ class _LoginScreenState extends State<LoginScreen> {
                           BoxShadow(
                             color: AppColors.emerald.withValues(alpha: 0.3),
                             blurRadius: 18,
-                            offset: const Offset(0, 8),
+                            offset: Offset(0, 8),
                           ),
                         ],
                       ),
-                      child: const Icon(
+                      child: Icon(
                         Icons.account_balance_wallet_rounded,
                         color: AppColors.gold,
                         size: 44,
                       ),
                     ),
                   ),
-                  const SizedBox(height: 16),
-                  const Text(
+                  SizedBox(height: 16),
+                  AppText(
                     'أهلاً بيك في محفظتي',
                     textAlign: TextAlign.center,
                     style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800),
                   ),
-                  const SizedBox(height: 6),
-                  Text(
+                  SizedBox(height: 6),
+                  AppText(
                     'سجل دخولك عشان تكمل',
                     textAlign: TextAlign.center,
                     style: TextStyle(fontSize: 14, color: Colors.grey[600]),
                   ),
-                  const SizedBox(height: 22),
+                  SizedBox(height: 22),
                   if (!firebaseReady) ...[
                     Container(
-                      padding: const EdgeInsets.all(12),
+                      padding: EdgeInsets.all(12),
                       decoration: BoxDecoration(
                         color: AppColors.gold.withValues(alpha: 0.12),
                         borderRadius: BorderRadius.circular(14),
@@ -174,13 +175,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       child: Row(
                         children: [
-                          const Icon(
-                            Icons.cloud_off_outlined,
-                            color: AppColors.gold,
-                          ),
-                          const SizedBox(width: 8),
+                          Icon(Icons.cloud_off_outlined, color: AppColors.gold),
+                          SizedBox(width: 8),
                           Expanded(
-                            child: Text(
+                            child: AppText(
                               'الحسابات السحابية لسه بتتجهز في النسخة دي. تقدر تكمل كضيف، وبياناتك هتفضل محفوظة على موبايلك.',
                               style: TextStyle(
                                 fontSize: 12.5,
@@ -192,18 +190,18 @@ class _LoginScreenState extends State<LoginScreen> {
                         ],
                       ),
                     ),
-                    const SizedBox(height: 16),
+                    SizedBox(height: 16),
                   ],
                   if (_notice != null) ...[
                     Container(
-                      padding: const EdgeInsets.all(12),
+                      padding: EdgeInsets.all(12),
                       decoration: BoxDecoration(
                         color: _noticeIsError
                             ? AppColors.expense.withValues(alpha: 0.08)
                             : AppColors.emerald.withValues(alpha: 0.08),
                         borderRadius: BorderRadius.circular(14),
                       ),
-                      child: Text(
+                      child: AppText(
                         _notice!,
                         textAlign: TextAlign.center,
                         style: TextStyle(
@@ -215,7 +213,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 16),
+                    SizedBox(height: 16),
                   ],
                   TextFormField(
                     controller: _email,
@@ -223,23 +221,23 @@ class _LoginScreenState extends State<LoginScreen> {
                     keyboardType: TextInputType.emailAddress,
                     textDirection: TextDirection.ltr,
                     validator: _validateEmail,
-                    autofillHints: const [AutofillHints.email],
-                    decoration: const InputDecoration(
-                      labelText: 'الإيميل',
+                    autofillHints: [AutofillHints.email],
+                    decoration: InputDecoration(
+                      labelText: tr('الإيميل'),
                       prefixIcon: Icon(Icons.alternate_email),
                     ),
                   ),
-                  const SizedBox(height: 12),
+                  SizedBox(height: 12),
                   TextFormField(
                     controller: _password,
                     enabled: firebaseReady,
                     obscureText: _obscure,
                     textDirection: TextDirection.ltr,
                     validator: _validatePassword,
-                    autofillHints: const [AutofillHints.password],
+                    autofillHints: [AutofillHints.password],
                     decoration: InputDecoration(
-                      labelText: 'كلمة السر',
-                      prefixIcon: const Icon(Icons.lock_outline),
+                      labelText: tr('كلمة السر'),
+                      prefixIcon: Icon(Icons.lock_outline),
                       suffixIcon: IconButton(
                         onPressed: () => setState(() => _obscure = !_obscure),
                         icon: Icon(
@@ -254,17 +252,17 @@ class _LoginScreenState extends State<LoginScreen> {
                     alignment: AlignmentDirectional.centerStart,
                     child: TextButton(
                       onPressed: firebaseReady && !_busy ? _forgot : null,
-                      child: const Text(
+                      child: AppText(
                         'نسيت كلمة السر؟',
                         style: TextStyle(fontWeight: FontWeight.w600),
                       ),
                     ),
                   ),
-                  const SizedBox(height: 4),
+                  SizedBox(height: 4),
                   FilledButton(
                     onPressed: firebaseReady && !_busy ? _submit : null,
                     child: _busy
-                        ? const SizedBox(
+                        ? SizedBox(
                             width: 22,
                             height: 22,
                             child: CircularProgressIndicator(
@@ -272,7 +270,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               color: Colors.white,
                             ),
                           )
-                        : const Text(
+                        : AppText(
                             'تسجيل الدخول',
                             style: TextStyle(
                               fontSize: 16,
@@ -280,30 +278,30 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                           ),
                   ),
-                  const SizedBox(height: 10),
+                  SizedBox(height: 10),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
+                      AppText(
                         'ماعندكش حساب؟',
                         style: TextStyle(color: Colors.grey[700]),
                       ),
                       TextButton(
                         onPressed: firebaseReady ? _openSignup : null,
-                        child: const Text(
+                        child: AppText(
                           'اعمل حساب جديد',
                           style: TextStyle(fontWeight: FontWeight.w700),
                         ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 6),
+                  SizedBox(height: 6),
                   Row(
                     children: [
                       Expanded(child: Divider(color: Colors.grey[300])),
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: Text(
+                        padding: EdgeInsets.symmetric(horizontal: 10),
+                        child: AppText(
                           'أو',
                           style: TextStyle(color: Colors.grey[500]),
                         ),
@@ -311,11 +309,11 @@ class _LoginScreenState extends State<LoginScreen> {
                       Expanded(child: Divider(color: Colors.grey[300])),
                     ],
                   ),
-                  const SizedBox(height: 10),
+                  SizedBox(height: 10),
                   OutlinedButton(
                     onPressed: _goHome,
                     style: OutlinedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      padding: EdgeInsets.symmetric(vertical: 14),
                       side: BorderSide(
                         color: AppColors.emerald.withValues(alpha: 0.5),
                       ),
@@ -323,7 +321,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         borderRadius: BorderRadius.circular(14),
                       ),
                     ),
-                    child: const Text(
+                    child: AppText(
                       'الدخول كضيف',
                       style: TextStyle(
                         fontSize: 15,

@@ -1,3 +1,4 @@
+import '../l10n.dart';
 import 'package:flutter/material.dart';
 
 import '../auth/auth_service.dart';
@@ -36,7 +37,7 @@ class _SignupScreenState extends State<SignupScreen> {
   void _goHome() {
     Navigator.of(context).pushAndRemoveUntil(
       PageRouteBuilder<void>(
-        transitionDuration: const Duration(milliseconds: 450),
+        transitionDuration: Duration(milliseconds: 450),
         pageBuilder: (_, _, _) => HomeShell(store: widget.store),
         transitionsBuilder: (_, a, _, child) =>
             FadeTransition(opacity: a, child: child),
@@ -66,101 +67,101 @@ class _SignupScreenState extends State<SignupScreen> {
   }
 
   String? _validateName(String? v) {
-    if ((v ?? '').trim().isEmpty) return 'اكتب اسمك';
+    if ((v ?? '').trim().isEmpty) return tr('اكتب اسمك');
     return null;
   }
 
   String? _validateEmail(String? v) {
     final value = (v ?? '').trim();
-    if (value.isEmpty) return 'اكتب الإيميل';
+    if (value.isEmpty) return tr('اكتب الإيميل');
     if (!value.contains('@') || !value.contains('.')) {
-      return 'الإيميل ده مش صحيح';
+      return tr('الإيميل ده مش صحيح');
     }
     return null;
   }
 
   String? _validatePassword(String? v) {
-    if ((v ?? '').isEmpty) return 'اكتب كلمة السر';
-    if (v!.length < 6) return 'كلمة السر لازم ٦ حروف على الأقل';
+    if ((v ?? '').isEmpty) return tr('اكتب كلمة السر');
+    if (v!.length < 6) return tr('كلمة السر لازم ٦ حروف على الأقل');
     return null;
   }
 
   String? _validateConfirm(String? v) {
-    if (v != _password.text) return 'كلمتا السر مش زي بعض';
+    if (v != _password.text) return tr('كلمتا السر مش زي بعض');
     return null;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('حساب جديد')),
+      appBar: AppBar(title: AppText('حساب جديد')),
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+            padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
             child: Form(
               key: _formKey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Text(
+                  AppText(
                     'اعمل حسابك وخلي فلوسك تحت السيطرة',
                     textAlign: TextAlign.center,
                     style: TextStyle(fontSize: 14, color: Colors.grey[600]),
                   ),
-                  const SizedBox(height: 18),
+                  SizedBox(height: 18),
                   if (_error != null) ...[
                     Container(
-                      padding: const EdgeInsets.all(12),
+                      padding: EdgeInsets.all(12),
                       decoration: BoxDecoration(
                         color: AppColors.expense.withValues(alpha: 0.08),
                         borderRadius: BorderRadius.circular(14),
                       ),
-                      child: Text(
+                      child: AppText(
                         _error!,
                         textAlign: TextAlign.center,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 13,
                           fontWeight: FontWeight.w600,
                           color: AppColors.expense,
                         ),
                       ),
                     ),
-                    const SizedBox(height: 14),
+                    SizedBox(height: 14),
                   ],
                   TextFormField(
                     controller: _name,
                     validator: _validateName,
                     textInputAction: TextInputAction.next,
-                    decoration: const InputDecoration(
-                      labelText: 'الاسم',
+                    decoration: InputDecoration(
+                      labelText: tr('الاسم'),
                       prefixIcon: Icon(Icons.person_outline),
                     ),
                   ),
-                  const SizedBox(height: 12),
+                  SizedBox(height: 12),
                   TextFormField(
                     controller: _email,
                     validator: _validateEmail,
                     keyboardType: TextInputType.emailAddress,
                     textDirection: TextDirection.ltr,
                     textInputAction: TextInputAction.next,
-                    autofillHints: const [AutofillHints.email],
-                    decoration: const InputDecoration(
-                      labelText: 'الإيميل',
+                    autofillHints: [AutofillHints.email],
+                    decoration: InputDecoration(
+                      labelText: tr('الإيميل'),
                       prefixIcon: Icon(Icons.alternate_email),
                     ),
                   ),
-                  const SizedBox(height: 12),
+                  SizedBox(height: 12),
                   TextFormField(
                     controller: _password,
                     validator: _validatePassword,
                     obscureText: _obscure,
                     textDirection: TextDirection.ltr,
                     textInputAction: TextInputAction.next,
-                    autofillHints: const [AutofillHints.newPassword],
+                    autofillHints: [AutofillHints.newPassword],
                     decoration: InputDecoration(
-                      labelText: 'كلمة السر',
-                      prefixIcon: const Icon(Icons.lock_outline),
+                      labelText: tr('كلمة السر'),
+                      prefixIcon: Icon(Icons.lock_outline),
                       suffixIcon: IconButton(
                         onPressed: () => setState(() => _obscure = !_obscure),
                         icon: Icon(
@@ -171,23 +172,23 @@ class _SignupScreenState extends State<SignupScreen> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 12),
+                  SizedBox(height: 12),
                   TextFormField(
                     controller: _confirm,
                     validator: _validateConfirm,
                     obscureText: _obscure,
                     textDirection: TextDirection.ltr,
-                    autofillHints: const [AutofillHints.newPassword],
-                    decoration: const InputDecoration(
-                      labelText: 'تأكيد كلمة السر',
+                    autofillHints: [AutofillHints.newPassword],
+                    decoration: InputDecoration(
+                      labelText: tr('تأكيد كلمة السر'),
                       prefixIcon: Icon(Icons.lock_reset_outlined),
                     ),
                   ),
-                  const SizedBox(height: 22),
+                  SizedBox(height: 22),
                   FilledButton(
                     onPressed: _busy ? null : _submit,
                     child: _busy
-                        ? const SizedBox(
+                        ? SizedBox(
                             width: 22,
                             height: 22,
                             child: CircularProgressIndicator(
@@ -195,7 +196,7 @@ class _SignupScreenState extends State<SignupScreen> {
                               color: Colors.white,
                             ),
                           )
-                        : const Text(
+                        : AppText(
                             'إنشاء الحساب',
                             style: TextStyle(
                               fontSize: 16,

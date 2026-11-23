@@ -7,10 +7,13 @@ import 'notifications.dart';
 import 'screens/splash_screen.dart';
 import 'store.dart';
 import 'theme.dart';
+import 'settings.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initializeDateFormatting('ar');
+  await initializeDateFormatting('en');
+  await AppSettings.instance.load();
   final store = WalletStore();
   await store.load();
   await AuthService.instance.init();
@@ -26,18 +29,21 @@ class MahfazatyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'محفظتي',
-      debugShowCheckedModeBanner: false,
-      theme: AppTheme.light,
-      locale: const Locale('ar'),
-      supportedLocales: const [Locale('ar')],
-      localizationsDelegates: const [
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      home: SplashScreen(store: store),
+    return AnimatedBuilder(
+      animation: AppSettings.instance,
+      builder: (context, _) => MaterialApp(
+        title: 'محفظتي',
+        debugShowCheckedModeBanner: false,
+        theme: AppTheme.light,
+        locale: Locale(AppSettings.instance.language),
+        supportedLocales: [Locale('ar'), Locale('en')],
+        localizationsDelegates: [
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        home: SplashScreen(store: store),
+      ),
     );
   }
 }

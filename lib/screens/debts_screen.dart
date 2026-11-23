@@ -1,3 +1,4 @@
+import '../l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lottie/lottie.dart';
@@ -28,8 +29,8 @@ class DebtsScreen extends StatelessWidget {
           floatingActionButton: FloatingActionButton.extended(
             onPressed: () => _showAddDebt(context, store),
             backgroundColor: AppColors.emerald,
-            icon: const Icon(Icons.add, color: Colors.white),
-            label: const Text(
+            icon: Icon(Icons.add, color: Colors.white),
+            label: AppText(
               'سلف جديد',
               style: TextStyle(
                 color: Colors.white,
@@ -39,10 +40,10 @@ class DebtsScreen extends StatelessWidget {
           ),
           body: NestedScrollView(
             headerSliverBuilder: (context, _) => [
-              const SliverToBoxAdapter(
+              SliverToBoxAdapter(
                 child: Padding(
                   padding: EdgeInsets.fromLTRB(16, 12, 16, 0),
-                  child: Text(
+                  child: AppText(
                     'سلف ودين',
                     style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800),
                   ),
@@ -50,7 +51,7 @@ class DebtsScreen extends StatelessWidget {
               ),
               SliverToBoxAdapter(
                 child: Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 12, 16, 4),
+                  padding: EdgeInsets.fromLTRB(16, 12, 16, 4),
                   child: Row(
                     children: [
                       Expanded(
@@ -61,7 +62,7 @@ class DebtsScreen extends StatelessWidget {
                           color: AppColors.income,
                         ),
                       ),
-                      const SizedBox(width: 10),
+                      SizedBox(width: 10),
                       Expanded(
                         child: _DebtSummaryCard(
                           title: 'عليا للناس',
@@ -70,7 +71,7 @@ class DebtsScreen extends StatelessWidget {
                           color: AppColors.expense,
                         ),
                       ),
-                      const SizedBox(width: 10),
+                      SizedBox(width: 10),
                       Expanded(
                         child: _DebtSummaryCard(
                           title: 'الصافي',
@@ -85,7 +86,7 @@ class DebtsScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              const SliverToBoxAdapter(
+              SliverToBoxAdapter(
                 child: TabBar(
                   dividerColor: Colors.transparent,
                   labelStyle: TextStyle(
@@ -129,17 +130,17 @@ class _DebtSummaryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       child: Padding(
-        padding: const EdgeInsets.all(12),
+        padding: EdgeInsets.all(12),
         child: Column(
           children: [
             Icon(icon, color: color, size: 20),
-            const SizedBox(height: 6),
-            Text(
+            SizedBox(height: 6),
+            AppText(
               title,
               style: TextStyle(fontSize: 11.5, color: Colors.grey[600]),
             ),
-            const SizedBox(height: 2),
-            Text(
+            SizedBox(height: 2),
+            AppText(
               fmtMoney(value),
               textAlign: TextAlign.center,
               style: TextStyle(
@@ -178,11 +179,11 @@ class _DebtList extends StatelessWidget {
     }
 
     return ListView(
-      padding: const EdgeInsets.fromLTRB(16, 12, 16, 90),
+      padding: EdgeInsets.fromLTRB(16, 12, 16, 90),
       children: [
         ...open.map((d) => _DebtCard(debt: d, store: store)),
         if (settled.isNotEmpty) ...[
-          const SectionTitle('اتسدت ✅'),
+          SectionTitle('اتسدت ✅'),
           ...settled.map((d) => _DebtCard(debt: d, store: store)),
         ],
       ],
@@ -201,30 +202,28 @@ class _DebtCard extends StatelessWidget {
     final isToMe = debt.direction == DebtDirection.owedToMe;
     final color = isToMe ? AppColors.income : AppColors.expense;
     return Padding(
-      padding: const EdgeInsets.only(bottom: 10),
+      padding: EdgeInsets.only(bottom: 10),
       child: Card(
         child: Opacity(
           opacity: debt.settled ? 0.55 : 1,
           child: ListTile(
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: 14,
-              vertical: 6,
-            ),
+            contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 6),
             leading: CircleAvatar(
               backgroundColor: color.withValues(alpha: 0.12),
-              child: Text(
+              child: AppText(
                 debt.person.isEmpty ? '؟' : debt.person.characters.first,
                 style: TextStyle(color: color, fontWeight: FontWeight.w800),
               ),
             ),
-            title: Text(
+            title: AppText(
               debt.person,
+              translate: false,
               style: TextStyle(
                 fontWeight: FontWeight.w700,
                 decoration: debt.settled ? TextDecoration.lineThrough : null,
               ),
             ),
-            subtitle: Text(
+            subtitle: AppText(
               [
                 fmtDay(debt.date),
                 if (debt.note.isNotEmpty) debt.note,
@@ -237,7 +236,7 @@ class _DebtCard extends StatelessWidget {
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text(
+                AppText(
                   fmtMoney(debt.amount),
                   style: TextStyle(
                     color: color,
@@ -262,18 +261,17 @@ class _DebtCard extends StatelessWidget {
                       final picked = await showDatePicker(
                         context: context,
                         initialDate:
-                            debt.remindAt ??
-                            today.add(const Duration(days: 1)),
+                            debt.remindAt ?? today.add(Duration(days: 1)),
                         firstDate: today,
-                        lastDate: today.add(const Duration(days: 365 * 5)),
-                        helpText: 'فكرني بالتسديد يوم',
+                        lastDate: today.add(Duration(days: 365 * 5)),
+                        helpText: tr('فكرني بالتسديد يوم'),
                       );
                       if (picked != null) {
                         store.setDebtReminder(debt.id, picked);
                         if (context.mounted) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
-                              content: Text(
+                              content: AppText(
                                 'هفكرك بالتسديد يوم ${fmtDay(picked)} 🔔',
                               ),
                             ),
@@ -287,28 +285,25 @@ class _DebtCard extends StatelessWidget {
                   itemBuilder: (_) => [
                     PopupMenuItem(
                       value: 'settle',
-                      child: Text(
+                      child: AppText(
                         debt.settled ? 'رجعها غير مسددة' : 'تم التسديد ✅',
                       ),
                     ),
                     if (!debt.settled)
                       PopupMenuItem(
                         value: 'remind',
-                        child: Text(
+                        child: AppText(
                           debt.remindAt == null
                               ? 'تذكير بالتسديد 🔔'
                               : 'تغيير ميعاد التذكير 🔔',
                         ),
                       ),
                     if (debt.remindAt != null)
-                      const PopupMenuItem(
+                      PopupMenuItem(
                         value: 'unremind',
-                        child: Text('إلغاء التذكير 🔕'),
+                        child: AppText('إلغاء التذكير 🔕'),
                       ),
-                    const PopupMenuItem(
-                      value: 'delete',
-                      child: Text('امسح 🗑'),
-                    ),
+                    PopupMenuItem(value: 'delete', child: AppText('امسح 🗑')),
                   ],
                 ),
               ],
@@ -382,74 +377,74 @@ class _AddDebtSheetState extends State<_AddDebtSheet> {
   Widget build(BuildContext context) {
     final isToMe = _direction == DebtDirection.owedToMe;
     return SingleChildScrollView(
-      padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
+      padding: EdgeInsets.fromLTRB(20, 0, 20, 24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Center(child: Lottie.asset('assets/lottie/coins.json', height: 90)),
-          const SizedBox(height: 6),
+          SizedBox(height: 6),
           SegmentedButton<DebtDirection>(
-            segments: const [
+            segments: [
               ButtonSegment(
                 value: DebtDirection.owedToMe,
-                label: Text('لي (هيرجعهولي)'),
+                label: AppText('لي (هيرجعهولي)'),
                 icon: Icon(Icons.call_received),
               ),
               ButtonSegment(
                 value: DebtDirection.iOwe,
-                label: Text('عليا (لازم أرده)'),
+                label: AppText('عليا (لازم أرده)'),
                 icon: Icon(Icons.call_made),
               ),
             ],
             selected: {_direction},
             onSelectionChanged: (s) => setState(() => _direction = s.first),
           ),
-          const SizedBox(height: 14),
+          SizedBox(height: 14),
           TextField(
             controller: _person,
-            decoration: const InputDecoration(
-              labelText: 'اسم الشخص',
+            decoration: InputDecoration(
+              labelText: tr('اسم الشخص'),
               prefixIcon: Icon(Icons.person_outline),
             ),
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: 12),
           TextField(
             controller: _amount,
-            keyboardType: const TextInputType.numberWithOptions(decimal: true),
+            keyboardType: TextInputType.numberWithOptions(decimal: true),
             inputFormatters: [
               FilteringTextInputFormatter.allow(RegExp(r'[0-9.]')),
             ],
-            decoration: const InputDecoration(
-              labelText: 'المبلغ',
+            decoration: InputDecoration(
+              labelText: tr('المبلغ'),
               suffixText: 'ج.م',
               prefixIcon: Icon(Icons.payments_outlined),
             ),
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: 12),
           TextField(
             controller: _note,
-            decoration: const InputDecoration(
-              labelText: 'ملاحظة (اختياري)',
+            decoration: InputDecoration(
+              labelText: tr('ملاحظة (اختياري)'),
               prefixIcon: Icon(Icons.notes),
             ),
           ),
           if (_error != null) ...[
-            const SizedBox(height: 8),
-            Text(
+            SizedBox(height: 8),
+            AppText(
               _error!,
               textAlign: TextAlign.center,
-              style: const TextStyle(color: AppColors.expense),
+              style: TextStyle(color: AppColors.expense),
             ),
           ],
-          const SizedBox(height: 18),
+          SizedBox(height: 18),
           FilledButton(
             onPressed: _save,
             style: FilledButton.styleFrom(
               backgroundColor: isToMe ? AppColors.income : AppColors.expense,
             ),
-            child: Text(
+            child: AppText(
               isToMe ? 'سجل إنه ليك' : 'سجل إنه عليك',
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
             ),
           ),
         ],

@@ -1,3 +1,4 @@
+import '../l10n.dart';
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -30,10 +31,10 @@ class _SplashScreenState extends State<SplashScreen>
     super.initState();
     _ctrl = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 900),
+      duration: Duration(milliseconds: 900),
     )..forward();
     _fade = CurvedAnimation(parent: _ctrl, curve: Curves.easeOutCubic);
-    _timer = Timer(const Duration(milliseconds: 2600), _go);
+    _timer = Timer(Duration(milliseconds: 2600), _go);
   }
 
   void _go() {
@@ -52,7 +53,7 @@ class _SplashScreenState extends State<SplashScreen>
         : HomeShell(store: widget.store);
     Navigator.of(context).pushReplacement(
       PageRouteBuilder<void>(
-        transitionDuration: const Duration(milliseconds: 450),
+        transitionDuration: Duration(milliseconds: 450),
         pageBuilder: (_, _, _) => dest,
         transitionsBuilder: (_, a, _, child) =>
             FadeTransition(opacity: a, child: child),
@@ -71,7 +72,7 @@ class _SplashScreenState extends State<SplashScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topRight,
             end: Alignment.bottomLeft,
@@ -83,14 +84,14 @@ class _SplashScreenState extends State<SplashScreen>
             opacity: _fade,
             child: Column(
               children: [
-                const Spacer(flex: 2),
+                Spacer(flex: 2),
                 Lottie.asset(
                   'assets/lottie/wallet_splash.json',
                   width: 230,
                   repeat: true,
                 ),
-                const SizedBox(height: 12),
-                const Text(
+                SizedBox(height: 12),
+                AppText(
                   'محفظتي',
                   style: TextStyle(
                     color: Colors.white,
@@ -98,8 +99,8 @@ class _SplashScreenState extends State<SplashScreen>
                     fontWeight: FontWeight.w800,
                   ),
                 ),
-                const SizedBox(height: 6),
-                Text(
+                SizedBox(height: 6),
+                AppText(
                   'فلوسك… تحت السيطرة',
                   style: TextStyle(
                     color: Colors.white.withValues(alpha: 0.85),
@@ -107,7 +108,7 @@ class _SplashScreenState extends State<SplashScreen>
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-                const Spacer(flex: 3),
+                Spacer(flex: 3),
                 SizedBox(
                   width: 26,
                   height: 26,
@@ -116,7 +117,7 @@ class _SplashScreenState extends State<SplashScreen>
                     color: Colors.white.withValues(alpha: 0.9),
                   ),
                 ),
-                const SizedBox(height: 36),
+                SizedBox(height: 36),
               ],
             ),
           ),

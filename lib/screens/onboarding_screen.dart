@@ -1,3 +1,4 @@
+import '../l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -13,7 +14,7 @@ class OnboardingScreen extends StatefulWidget {
 
   final WalletStore store;
 
-  static const seenKey = 'onboarding_seen_v1';
+  static final seenKey = 'onboarding_seen_v1';
 
   static Future<bool> hasSeen() async {
     final prefs = await SharedPreferences.getInstance();
@@ -25,7 +26,7 @@ class OnboardingScreen extends StatefulWidget {
 }
 
 class _OnboardingPage {
-  const _OnboardingPage({
+  _OnboardingPage({
     required this.lottie,
     required this.title,
     required this.subtitle,
@@ -40,7 +41,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   final PageController _controller = PageController();
   int _index = 0;
 
-  static const List<_OnboardingPage> _pages = [
+  static final List<_OnboardingPage> _pages = [
     _OnboardingPage(
       lottie: 'assets/lottie/money.json',
       title: 'مصاريفك ودخلك في مكان واحد',
@@ -50,7 +51,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     _OnboardingPage(
       lottie: 'assets/lottie/coins.json',
       title: 'سلف ودين من غير ما تنسى',
-      subtitle: 'اعرف مين ليه عليك ومين لك عنده، والصافي قدامك، وسدد بضغطة واحدة.',
+      subtitle:
+          'اعرف مين ليه عليك ومين لك عنده، والصافي قدامك، وسدد بضغطة واحدة.',
     ),
     _OnboardingPage(
       lottie: 'assets/lottie/success.json',
@@ -63,7 +65,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   bool get _isLast => _index == _pages.length - 1;
 
   Route<void> _fadeTo(Widget page) => PageRouteBuilder<void>(
-    transitionDuration: const Duration(milliseconds: 450),
+    transitionDuration: Duration(milliseconds: 450),
     pageBuilder: (_, _, _) => page,
     transitionsBuilder: (_, a, _, child) =>
         FadeTransition(opacity: a, child: child),
@@ -85,7 +87,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       _finish();
     } else {
       _controller.nextPage(
-        duration: const Duration(milliseconds: 350),
+        duration: Duration(milliseconds: 350),
         curve: Curves.easeOutCubic,
       );
     }
@@ -107,7 +109,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               alignment: AlignmentDirectional.centerStart,
               child: TextButton(
                 onPressed: _isLast ? null : _finish,
-                child: Text(
+                child: AppText(
                   'تخطي',
                   style: TextStyle(
                     color: _isLast ? Colors.transparent : Colors.grey[600],
@@ -124,22 +126,22 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 itemBuilder: (context, i) {
                   final page = _pages[i];
                   return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 32),
+                    padding: EdgeInsets.symmetric(horizontal: 32),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Lottie.asset(page.lottie, width: 240, repeat: true),
-                        const SizedBox(height: 20),
-                        Text(
+                        SizedBox(height: 20),
+                        AppText(
                           page.title,
                           textAlign: TextAlign.center,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 22,
                             fontWeight: FontWeight.w800,
                           ),
                         ),
-                        const SizedBox(height: 10),
-                        Text(
+                        SizedBox(height: 10),
+                        AppText(
                           page.subtitle,
                           textAlign: TextAlign.center,
                           style: TextStyle(
@@ -159,8 +161,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               children: List.generate(_pages.length, (i) {
                 final active = i == _index;
                 return AnimatedContainer(
-                  duration: const Duration(milliseconds: 250),
-                  margin: const EdgeInsets.symmetric(horizontal: 4),
+                  duration: Duration(milliseconds: 250),
+                  margin: EdgeInsets.symmetric(horizontal: 4),
                   width: active ? 22 : 8,
                   height: 8,
                   decoration: BoxDecoration(
@@ -173,17 +175,14 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               }),
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(24, 20, 24, 28),
+              padding: EdgeInsets.fromLTRB(24, 20, 24, 28),
               child: SizedBox(
                 width: double.infinity,
                 child: FilledButton(
                   onPressed: _next,
-                  child: Text(
+                  child: AppText(
                     _isLast ? 'يلا نبدأ' : 'التالي',
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700,
-                    ),
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
                   ),
                 ),
               ),

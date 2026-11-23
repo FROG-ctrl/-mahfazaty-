@@ -1,3 +1,4 @@
+import '../l10n.dart';
 import 'package:flutter/material.dart';
 
 import '../auth/auth_service.dart';
@@ -26,16 +27,16 @@ class HomeScreen extends StatelessWidget {
     final sure = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('تسجيل الخروج؟'),
-        content: const Text('بياناتك المحفوظة على الموبايل هتفضل زي ما هي.'),
+        title: AppText('تسجيل الخروج؟'),
+        content: AppText('بياناتك المحفوظة على الموبايل هتفضل زي ما هي.'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
-            child: const Text('إلغاء'),
+            child: AppText('إلغاء'),
           ),
           FilledButton(
             onPressed: () => Navigator.pop(ctx, true),
-            child: const Text('خروج'),
+            child: AppText('خروج'),
           ),
         ],
       ),
@@ -54,12 +55,12 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: ListView(
-        padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
+        padding: EdgeInsets.fromLTRB(16, 12, 16, 24),
         children: [
           Row(
             children: [
-              const Expanded(
-                child: Text(
+              Expanded(
+                child: AppText(
                   'محفظتي',
                   style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800),
                 ),
@@ -84,9 +85,9 @@ class HomeScreen extends StatelessWidget {
                 ),
             ],
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: 12),
           _BalanceCard(store: store),
-          const SizedBox(height: 14),
+          SizedBox(height: 14),
           Row(
             children: [
               Expanded(
@@ -101,7 +102,7 @@ class HomeScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(width: 12),
+              SizedBox(width: 12),
               Expanded(
                 child: _QuickAction(
                   label: 'إضافة دخل',
@@ -116,15 +117,15 @@ class HomeScreen extends StatelessWidget {
               ),
             ],
           ),
-          const SectionTitle('مصاريف آخر ٧ أيام'),
+          SectionTitle('مصاريف آخر ٧ أيام'),
           Card(
             child: Padding(
-              padding: const EdgeInsets.all(16),
+              padding: EdgeInsets.all(16),
               child: store.last7DaysExpense.every((v) => v == 0)
-                  ? const Padding(
+                  ? Padding(
                       padding: EdgeInsets.symmetric(vertical: 24),
                       child: Center(
-                        child: Text(
+                        child: AppText(
                           'مفيش مصاريف الأسبوع ده 🎉',
                           style: TextStyle(fontWeight: FontWeight.w600),
                         ),
@@ -141,7 +142,7 @@ class HomeScreen extends StatelessWidget {
                     ),
             ),
           ),
-          const SectionTitle('آخر العمليات'),
+          SectionTitle('آخر العمليات'),
           if (store.recent.isEmpty)
             Card(
               child: EmptyState(
@@ -155,11 +156,11 @@ class HomeScreen extends StatelessWidget {
             Card(
               child: ListView.separated(
                 shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                padding: const EdgeInsets.symmetric(vertical: 6),
+                physics: NeverScrollableScrollPhysics(),
+                padding: EdgeInsets.symmetric(vertical: 6),
                 itemCount: store.recent.length,
                 separatorBuilder: (_, __) =>
-                    const Divider(height: 1, indent: 64, endIndent: 16),
+                    Divider(height: 1, indent: 64, endIndent: 16),
                 itemBuilder: (context, i) =>
                     _TxTile(tx: store.recent[i], store: store),
               ),
@@ -179,10 +180,10 @@ class _BalanceCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(22),
+      padding: EdgeInsets.all(22),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(24),
-        gradient: const LinearGradient(
+        gradient: LinearGradient(
           begin: Alignment.topRight,
           end: Alignment.bottomLeft,
           colors: [AppColors.teal, AppColors.emerald, AppColors.emeraldDark],
@@ -191,7 +192,7 @@ class _BalanceCard extends StatelessWidget {
           BoxShadow(
             color: AppColors.emerald.withValues(alpha: 0.35),
             blurRadius: 18,
-            offset: const Offset(0, 8),
+            offset: Offset(0, 8),
           ),
         ],
       ),
@@ -216,7 +217,7 @@ class _BalanceCard extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
+              AppText(
                 'الرصيد الحالي',
                 style: TextStyle(
                   color: Colors.white.withValues(alpha: 0.85),
@@ -224,16 +225,16 @@ class _BalanceCard extends StatelessWidget {
                   fontWeight: FontWeight.w500,
                 ),
               ),
-              const SizedBox(height: 6),
-              Text(
+              SizedBox(height: 6),
+              AppText(
                 fmtMoney(store.balance),
-                style: const TextStyle(
+                style: TextStyle(
                   color: Colors.white,
                   fontSize: 30,
                   fontWeight: FontWeight.w800,
                 ),
               ),
-              const SizedBox(height: 18),
+              SizedBox(height: 18),
               Row(
                 children: [
                   Expanded(
@@ -243,7 +244,7 @@ class _BalanceCard extends StatelessWidget {
                       icon: Icons.south_west,
                     ),
                   ),
-                  const SizedBox(width: 10),
+                  SizedBox(width: 10),
                   Expanded(
                     child: _MiniStat(
                       label: 'مصروف الشهر',
@@ -275,7 +276,7 @@ class _MiniStat extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       decoration: BoxDecoration(
         color: Colors.white.withValues(alpha: 0.12),
         borderRadius: BorderRadius.circular(14),
@@ -283,22 +284,22 @@ class _MiniStat extends StatelessWidget {
       child: Row(
         children: [
           Icon(icon, color: Colors.white, size: 18),
-          const SizedBox(width: 8),
+          SizedBox(width: 8),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
+                AppText(
                   label,
                   style: TextStyle(
                     color: Colors.white.withValues(alpha: 0.8),
                     fontSize: 11.5,
                   ),
                 ),
-                Text(
+                AppText(
                   value,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: Colors.white,
                     fontSize: 14,
                     fontWeight: FontWeight.w700,
@@ -329,13 +330,13 @@ class _QuickAction extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: Colors.white,
+      color: Theme.of(context).colorScheme.surface,
       borderRadius: BorderRadius.circular(18),
       child: InkWell(
         borderRadius: BorderRadius.circular(18),
         onTap: onTap,
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 16),
+          padding: EdgeInsets.symmetric(vertical: 16),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -344,8 +345,8 @@ class _QuickAction extends StatelessWidget {
                 backgroundColor: color.withValues(alpha: 0.12),
                 child: Icon(icon, color: color, size: 18),
               ),
-              const SizedBox(width: 8),
-              Text(
+              SizedBox(width: 8),
+              AppText(
                 label,
                 style: TextStyle(
                   fontWeight: FontWeight.w700,
@@ -367,7 +368,7 @@ class _TxTile extends StatelessWidget {
   final WalletTx tx;
   final WalletStore store;
 
-  static const _icons = [
+  static final _icons = [
     Icons.restaurant_outlined,
     Icons.local_hospital_outlined,
     Icons.directions_bus_outlined,
@@ -388,18 +389,20 @@ class _TxTile extends StatelessWidget {
         backgroundColor: color.withValues(alpha: 0.1),
         child: Icon(icon, color: color, size: 20),
       ),
-      title: Text(
-        tx.category.isEmpty ? (isExpense ? 'مصروف' : 'دخل') : tx.category,
-        style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 14.5),
+      title: AppText(
+        tx.category.isEmpty ? tr(isExpense ? 'مصروف' : 'دخل') : tx.category,
+        translate: false,
+        style: TextStyle(fontWeight: FontWeight.w700, fontSize: 14.5),
       ),
-      subtitle: Text(
+      subtitle: AppText(
         tx.note.isEmpty ? fmtDay(tx.date) : '${tx.note} • ${fmtDay(tx.date)}',
+        translate: false,
         style: TextStyle(fontSize: 12, color: Colors.grey[600]),
       ),
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(
+          AppText(
             '${isExpense ? '-' : '+'} ${fmtMoney(tx.amount)}',
             style: TextStyle(
               color: color,
@@ -422,9 +425,7 @@ class _TxTile extends StatelessWidget {
                 showEditTransactionSheet(context, store, tx);
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('مينفعش تعديل عمليات يوم سابق'),
-                  ),
+                  SnackBar(content: AppText('مينفعش تعديل عمليات يوم سابق')),
                 );
               }
             },

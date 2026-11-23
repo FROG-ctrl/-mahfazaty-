@@ -1,3 +1,4 @@
+import '../l10n.dart';
 import 'package:flutter/material.dart';
 
 import '../store.dart';
@@ -20,21 +21,21 @@ class StatsScreen extends StatelessWidget {
 
     return SafeArea(
       child: ListView(
-        padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
+        padding: EdgeInsets.fromLTRB(16, 12, 16, 24),
         children: [
-          const Text(
+          AppText(
             'الإحصائيات',
             style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800),
           ),
-          const SectionTitle('مصاريف الشهر حسب التصنيف'),
+          SectionTitle('مصاريف الشهر حسب التصنيف'),
           Card(
             child: Padding(
-              padding: const EdgeInsets.all(16),
+              padding: EdgeInsets.all(16),
               child: byCat.isEmpty
-                  ? const Padding(
+                  ? Padding(
                       padding: EdgeInsets.symmetric(vertical: 24),
                       child: Center(
-                        child: Text(
+                        child: AppText(
                           'مفيش مصاريف الشهر ده لسه',
                           style: TextStyle(fontWeight: FontWeight.w600),
                         ),
@@ -45,21 +46,21 @@ class StatsScreen extends StatelessWidget {
                         Row(
                           children: [
                             CategoryDonut(entries: byCat.take(8).toList()),
-                            const SizedBox(width: 16),
+                            SizedBox(width: 16),
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
+                                  AppText(
                                     'إجمالي الشهر',
                                     style: TextStyle(
                                       fontSize: 12,
                                       color: Colors.grey[600],
                                     ),
                                   ),
-                                  Text(
+                                  AppText(
                                     fmtMoney(monthTotal),
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       fontSize: 19,
                                       fontWeight: FontWeight.w800,
                                       color: AppColors.emeraldDark,
@@ -70,14 +71,14 @@ class StatsScreen extends StatelessWidget {
                             ),
                           ],
                         ),
-                        const SizedBox(height: 14),
+                        SizedBox(height: 14),
                         ...byCat.map((e) {
                           final i = byCat.indexOf(e);
                           final pct = monthTotal == 0
                               ? 0.0
                               : e.value / monthTotal * 100;
                           return Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 4),
+                            padding: EdgeInsets.symmetric(vertical: 4),
                             child: Row(
                               children: [
                                 CircleAvatar(
@@ -86,28 +87,28 @@ class StatsScreen extends StatelessWidget {
                                       CategoryDonut.palette[i %
                                           CategoryDonut.palette.length],
                                 ),
-                                const SizedBox(width: 8),
+                                SizedBox(width: 8),
                                 Expanded(
-                                  child: Text(
+                                  child: AppText(
                                     e.key,
                                     overflow: TextOverflow.ellipsis,
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       fontWeight: FontWeight.w600,
                                       fontSize: 13.5,
                                     ),
                                   ),
                                 ),
-                                Text(
+                                AppText(
                                   '${pct.toStringAsFixed(0)}%',
                                   style: TextStyle(
                                     fontSize: 12,
                                     color: Colors.grey[600],
                                   ),
                                 ),
-                                const SizedBox(width: 8),
-                                Text(
+                                SizedBox(width: 8),
+                                AppText(
                                   fmtMoney(e.value),
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     fontWeight: FontWeight.w700,
                                     fontSize: 13,
                                   ),
@@ -120,21 +121,21 @@ class StatsScreen extends StatelessWidget {
                     ),
             ),
           ),
-          const SectionTitle('الدخل مقابل المصروف (آخر ٦ شهور)'),
+          SectionTitle('الدخل مقابل المصروف (آخر ٦ شهور)'),
           Card(
             child: Padding(
-              padding: const EdgeInsets.all(16),
+              padding: EdgeInsets.all(16),
               child: Column(
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       _legendDot(AppColors.income, 'دخل'),
-                      const SizedBox(width: 16),
+                      SizedBox(width: 16),
                       _legendDot(AppColors.expense, 'مصروف'),
                     ],
                   ),
-                  const SizedBox(height: 10),
+                  SizedBox(height: 10),
                   MonthlyBars(
                     months: months.map((m) => m.month).toList(),
                     income: months.map((m) => m.income).toList(),
@@ -159,10 +160,10 @@ class StatsScreen extends StatelessWidget {
   Widget _legendDot(Color color, String label) => Row(
     children: [
       CircleAvatar(radius: 5, backgroundColor: color),
-      const SizedBox(width: 5),
-      Text(
+      SizedBox(width: 5),
+      AppText(
         label,
-        style: const TextStyle(fontSize: 12.5, fontWeight: FontWeight.w600),
+        style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w600),
       ),
     ],
   );

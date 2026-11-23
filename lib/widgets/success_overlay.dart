@@ -1,8 +1,11 @@
+import '../l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
-void showSuccessOverlay(BuildContext context,
-    {String message = 'تمت الإضافة بنجاح'}) {
+void showSuccessOverlay(
+  BuildContext context, {
+  String message = 'تمت الإضافة بنجاح',
+}) {
   showDialog<void>(
     context: context,
     barrierDismissible: false,
@@ -26,7 +29,7 @@ class _SuccessDialogState extends State<_SuccessDialog> {
     return Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
       child: Padding(
-        padding: const EdgeInsets.all(24),
+        padding: EdgeInsets.all(24),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -36,16 +39,18 @@ class _SuccessDialogState extends State<_SuccessDialog> {
               repeat: false,
               onLoaded: (composition) {
                 Future.delayed(
-                    composition.duration +
-                        const Duration(milliseconds: 500), () {
-                  if (mounted) navigator.pop();
-                });
+                  composition.duration + Duration(milliseconds: 500),
+                  () {
+                    if (mounted) navigator.pop();
+                  },
+                );
               },
             ),
-            Text(widget.message,
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                    fontSize: 16, fontWeight: FontWeight.w700)),
+            AppText(
+              widget.message,
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+            ),
           ],
         ),
       ),

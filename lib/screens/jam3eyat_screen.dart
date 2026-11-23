@@ -1,3 +1,4 @@
+import '../l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lottie/lottie.dart';
@@ -25,42 +26,42 @@ class Jam3eyatScreen extends StatelessWidget {
         floatingActionButton: FloatingActionButton.extended(
           onPressed: () => _showAddJam3eya(context, store),
           backgroundColor: AppColors.gold,
-          icon: const Icon(Icons.add, color: Colors.white),
-          label: const Text(
+          icon: Icon(Icons.add, color: Colors.white),
+          label: AppText(
             'جمعية جديدة',
             style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
           ),
         ),
         body: ListView(
-          padding: const EdgeInsets.fromLTRB(16, 12, 16, 90),
+          padding: EdgeInsets.fromLTRB(16, 12, 16, 90),
           children: [
-            const Text(
+            AppText(
               'الجمعيات',
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800),
             ),
-            const SizedBox(height: 12),
+            SizedBox(height: 12),
             Card(
               child: Padding(
-                padding: const EdgeInsets.all(14),
+                padding: EdgeInsets.all(14),
                 child: Row(
                   children: [
                     Lottie.asset('assets/lottie/money.json', width: 74),
-                    const SizedBox(width: 12),
+                    SizedBox(width: 12),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
+                          AppText(
                             active.isEmpty
                                 ? 'مفيش جمعيات شغالة'
                                 : '${active.length} جمعية شغالة',
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontWeight: FontWeight.w800,
                               fontSize: 15.5,
                             ),
                           ),
-                          const SizedBox(height: 3),
-                          Text(
+                          SizedBox(height: 3),
+                          AppText(
                             active.isEmpty
                                 ? 'اعمل جمعية وتابع أقساطك شهر بشهر'
                                 : 'بتدفع ${fmtMoney(store.activeJam3eyatMonthly)} كل شهر',
@@ -90,7 +91,7 @@ class Jam3eyatScreen extends StatelessWidget {
             else ...[
               ...active.map((j) => _Jam3eyaCard(jam3eya: j, store: store)),
               if (done.isNotEmpty) ...[
-                const SectionTitle('خلصت 🎉'),
+                SectionTitle('خلصت 🎉'),
                 ...done.map((j) => _Jam3eyaCard(jam3eya: j, store: store)),
               ],
             ],
@@ -115,13 +116,13 @@ class _Jam3eyaCard extends StatelessWidget {
     final current = jam3eya.currentMonthIndex;
 
     return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
+      padding: EdgeInsets.only(bottom: 12),
       child: Card(
         child: InkWell(
           borderRadius: BorderRadius.circular(20),
           onTap: () => _showJam3eyaDetails(context, store, jam3eya),
           child: Padding(
-            padding: const EdgeInsets.all(16),
+            padding: EdgeInsets.all(16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -129,17 +130,18 @@ class _Jam3eyaCard extends StatelessWidget {
                   children: [
                     CircleAvatar(
                       backgroundColor: AppColors.gold.withValues(alpha: 0.15),
-                      child: const Icon(
+                      child: Icon(
                         Icons.groups,
                         color: AppColors.gold,
                         size: 20,
                       ),
                     ),
-                    const SizedBox(width: 10),
+                    SizedBox(width: 10),
                     Expanded(
-                      child: Text(
+                      child: AppText(
                         jam3eya.name,
-                        style: const TextStyle(
+                        translate: false,
+                        style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w800,
                         ),
@@ -163,7 +165,7 @@ class _Jam3eyaCard extends StatelessWidget {
                           _pickJam3eyaReminder(context, store, jam3eya),
                     ),
                     Container(
-                      padding: const EdgeInsets.symmetric(
+                      padding: EdgeInsets.symmetric(
                         horizontal: 10,
                         vertical: 4,
                       ),
@@ -173,7 +175,7 @@ class _Jam3eyaCard extends StatelessWidget {
                             : AppColors.emerald.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(8),
                       ),
-                      child: Text(
+                      child: AppText(
                         jam3eya.isComplete
                             ? 'خلصت'
                             : (jam3eya.received ? 'قبضتها 💰' : 'شغالة'),
@@ -188,23 +190,23 @@ class _Jam3eyaCard extends StatelessWidget {
                     ),
                   ],
                 ),
-                const SizedBox(height: 12),
+                SizedBox(height: 12),
                 ClipRRect(
                   borderRadius: BorderRadius.circular(6),
                   child: LinearProgressIndicator(
                     value: progress,
                     minHeight: 8,
-                    backgroundColor: const Color(0xFFEEF2F1),
-                    valueColor: const AlwaysStoppedAnimation(AppColors.emerald),
+                    backgroundColor: Color(0xFFEEF2F1),
+                    valueColor: AlwaysStoppedAnimation(AppColors.emerald),
                   ),
                 ),
-                const SizedBox(height: 8),
-                Text(
+                SizedBox(height: 8),
+                AppText(
                   'دفعت ${jam3eya.paidCount} من ${jam3eya.monthsCount} شهر'
                   '${current != null && !jam3eya.isComplete ? ' • إحنا في الشهر $current' : ''}',
                   style: TextStyle(fontSize: 12, color: Colors.grey[600]),
                 ),
-                const SizedBox(height: 12),
+                SizedBox(height: 12),
                 Wrap(
                   spacing: 8,
                   runSpacing: 6,
@@ -253,22 +255,22 @@ Future<void> _pickJam3eyaReminder(
     final action = await showDialog<String>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('تذكير القسط 🔔'),
-        content: Text(
+        title: AppText('تذكير القسط 🔔'),
+        content: AppText(
           'هفكرك بقسط جمعية "${j.name}" يوم ${fmtDay(j.remindAt!)}.',
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, 'clear'),
-            child: const Text('إلغاء التذكير'),
+            child: AppText('إلغاء التذكير'),
           ),
           TextButton(
             onPressed: () => Navigator.pop(ctx, 'close'),
-            child: const Text('سيبه زي ما هو'),
+            child: AppText('سيبه زي ما هو'),
           ),
           FilledButton(
             onPressed: () => Navigator.pop(ctx, 'change'),
-            child: const Text('غير الميعاد'),
+            child: AppText('غير الميعاد'),
           ),
         ],
       ),
@@ -282,17 +284,17 @@ Future<void> _pickJam3eyaReminder(
   if (!context.mounted) return;
   final picked = await showDatePicker(
     context: context,
-    initialDate: j.remindAt ?? today.add(const Duration(days: 1)),
+    initialDate: j.remindAt ?? today.add(Duration(days: 1)),
     firstDate: today,
-    lastDate: today.add(const Duration(days: 365 * 5)),
-    helpText: 'فكرني بقسط الجمعية يوم',
+    lastDate: today.add(Duration(days: 365 * 5)),
+    helpText: tr('فكرني بقسط الجمعية يوم'),
   );
   if (picked != null) {
     store.setJam3eyaReminder(j.id, picked);
     if (context.mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('هفكرك بقسط "${j.name}" يوم ${fmtDay(picked)} 🔔'),
+          content: AppText('هفكرك بقسط "${j.name}" يوم ${fmtDay(picked)} 🔔'),
         ),
       );
     }
@@ -323,20 +325,20 @@ class _Jam3eyaDetails extends StatelessWidget {
       maxChildSize: 0.95,
       builder: (context, scroll) => ListView(
         controller: scroll,
-        padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
+        padding: EdgeInsets.fromLTRB(20, 0, 20, 24),
         children: [
-          Text(
+          AppText(
             j.name,
             textAlign: TextAlign.center,
-            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
           ),
-          const SizedBox(height: 4),
-          Text(
+          SizedBox(height: 4),
+          AppText(
             'بدأت ${fmtMonth(j.monthDate(1))} • القسط ${fmtMoney(j.monthlyAmount)} • الإجمالي ${fmtMoney(j.totalPot)}',
             textAlign: TextAlign.center,
             style: TextStyle(fontSize: 12.5, color: Colors.grey[600]),
           ),
-          const SizedBox(height: 10),
+          SizedBox(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -344,7 +346,7 @@ class _Jam3eyaDetails extends StatelessWidget {
                 Icons.savings_outlined,
                 'دفعت: ${fmtMoney(j.paidSoFar)}',
               ),
-              const SizedBox(width: 8),
+              SizedBox(width: 8),
               InfoChip(
                 Icons.hourglass_bottom,
                 'فاضل: ${fmtMoney(j.remaining)}',
@@ -352,7 +354,7 @@ class _Jam3eyaDetails extends StatelessWidget {
               ),
             ],
           ),
-          const SectionTitle('شهور الجمعية'),
+          SectionTitle('شهور الجمعية'),
           Wrap(
             spacing: 8,
             runSpacing: 8,
@@ -370,16 +372,13 @@ class _Jam3eyaDetails extends StatelessWidget {
                 },
                 child: Container(
                   width: 88,
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 10,
-                    horizontal: 4,
-                  ),
+                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 4),
                   decoration: BoxDecoration(
                     color: paid
                         ? AppColors.emerald
                         : isReceive
                         ? AppColors.gold.withValues(alpha: 0.15)
-                        : const Color(0xFFF1F4F3),
+                        : Color(0xFFF1F4F3),
                     borderRadius: BorderRadius.circular(12),
                     border: Border.all(
                       color: isReceive
@@ -392,7 +391,7 @@ class _Jam3eyaDetails extends StatelessWidget {
                   ),
                   child: Column(
                     children: [
-                      Text(
+                      AppText(
                         fmtMonth(
                           j.monthDate(idx),
                         ).replaceAll(RegExp(r'\s\d{4}'), ''),
@@ -407,8 +406,8 @@ class _Jam3eyaDetails extends StatelessWidget {
                               : AppColors.ink,
                         ),
                       ),
-                      const SizedBox(height: 2),
-                      Text(
+                      SizedBox(height: 2),
+                      AppText(
                         isReceive
                             ? 'قبضتك 🎉'
                             : paid
@@ -429,13 +428,13 @@ class _Jam3eyaDetails extends StatelessWidget {
               );
             }),
           ),
-          const SizedBox(height: 8),
-          Text(
+          SizedBox(height: 8),
+          AppText(
             'دوس على الشهر لما تدفع قسطه',
             textAlign: TextAlign.center,
             style: TextStyle(fontSize: 12, color: Colors.grey[500]),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           FilledButton.icon(
             onPressed: () {
               store.toggleJam3eyaReceived(j.id);
@@ -451,21 +450,21 @@ class _Jam3eyaDetails extends StatelessWidget {
               backgroundColor: j.received ? Colors.grey : AppColors.gold,
             ),
             icon: Icon(j.received ? Icons.undo : Icons.savings_outlined),
-            label: Text(
+            label: AppText(
               j.received
                   ? 'تراجع عن القبض'
                   : 'قبضت الجمعية (${fmtMoney(j.totalPot)})',
-              style: const TextStyle(fontWeight: FontWeight.w700),
+              style: TextStyle(fontWeight: FontWeight.w700),
             ),
           ),
-          const SizedBox(height: 10),
+          SizedBox(height: 10),
           TextButton.icon(
             onPressed: () {
               store.deleteJam3eya(j.id);
               Navigator.of(context).pop();
             },
-            icon: const Icon(Icons.delete_outline, color: AppColors.expense),
-            label: const Text(
+            icon: Icon(Icons.delete_outline, color: AppColors.expense),
+            label: AppText(
               'امسح الجمعية',
               style: TextStyle(color: AppColors.expense),
             ),
@@ -541,43 +540,43 @@ class _AddJam3eyaSheetState extends State<_AddJam3eyaSheet> {
   Widget build(BuildContext context) {
     final monthly = double.tryParse(_monthly.text.trim()) ?? 0;
     return SingleChildScrollView(
-      padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
+      padding: EdgeInsets.fromLTRB(20, 0, 20, 24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const Text(
+          AppText(
             'جمعية جديدة',
             textAlign: TextAlign.center,
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
           ),
-          const SizedBox(height: 14),
+          SizedBox(height: 14),
           TextField(
             controller: _name,
-            decoration: const InputDecoration(
-              labelText: 'اسم الجمعية',
-              hintText: 'مثلاً: جمعية الشغل',
+            decoration: InputDecoration(
+              labelText: tr('اسم الجمعية'),
+              hintText: tr('مثلاً: جمعية الشغل'),
               prefixIcon: Icon(Icons.groups_outlined),
             ),
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: 12),
           TextField(
             controller: _monthly,
-            keyboardType: const TextInputType.numberWithOptions(decimal: true),
+            keyboardType: TextInputType.numberWithOptions(decimal: true),
             inputFormatters: [
               FilteringTextInputFormatter.allow(RegExp(r'[0-9.]')),
             ],
             onChanged: (_) => setState(() {}),
-            decoration: const InputDecoration(
-              labelText: 'القسط الشهري',
+            decoration: InputDecoration(
+              labelText: tr('القسط الشهري'),
               suffixText: 'ج.م',
               prefixIcon: Icon(Icons.payments_outlined),
             ),
           ),
-          const SizedBox(height: 14),
+          SizedBox(height: 14),
           Row(
             children: [
-              const Expanded(
-                child: Text(
+              Expanded(
+                child: AppText(
                   'عدد الشهور',
                   style: TextStyle(fontWeight: FontWeight.w700),
                 ),
@@ -591,28 +590,25 @@ class _AddJam3eyaSheetState extends State<_AddJam3eyaSheet> {
                         }
                       })
                     : null,
-                icon: const Icon(Icons.remove_circle_outline),
+                icon: Icon(Icons.remove_circle_outline),
               ),
-              Text(
+              AppText(
                 '$_monthsCount',
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w800,
-                ),
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
               ),
               IconButton(
                 onPressed: _monthsCount < 24
                     ? () => setState(() => _monthsCount++)
                     : null,
-                icon: const Icon(Icons.add_circle_outline),
+                icon: Icon(Icons.add_circle_outline),
               ),
             ],
           ),
-          const SizedBox(height: 4),
+          SizedBox(height: 4),
           Row(
             children: [
-              const Expanded(
-                child: Text(
+              Expanded(
+                child: AppText(
                   'شهر البداية',
                   style: TextStyle(fontWeight: FontWeight.w700),
                 ),
@@ -623,7 +619,7 @@ class _AddJam3eyaSheetState extends State<_AddJam3eyaSheet> {
                   12,
                   (i) => DropdownMenuItem(
                     value: i + 1,
-                    child: Text(
+                    child: AppText(
                       fmtMonth(
                         DateTime(_startYear, i + 1),
                       ).replaceAll(RegExp(r'\s\d{4}'), ''),
@@ -632,25 +628,25 @@ class _AddJam3eyaSheetState extends State<_AddJam3eyaSheet> {
                 ),
                 onChanged: (v) => setState(() => _startMonth = v ?? 1),
               ),
-              const SizedBox(width: 8),
+              SizedBox(width: 8),
               DropdownButton<int>(
                 value: _startYear,
                 items: List.generate(
                   4,
                   (i) => DropdownMenuItem(
                     value: DateTime.now().year + i - 1,
-                    child: Text('${DateTime.now().year + i - 1}'),
+                    child: AppText('${DateTime.now().year + i - 1}'),
                   ),
                 ),
                 onChanged: (v) => setState(() => _startYear = v ?? _startYear),
               ),
             ],
           ),
-          const SizedBox(height: 4),
+          SizedBox(height: 4),
           Row(
             children: [
-              const Expanded(
-                child: Text(
+              Expanded(
+                child: AppText(
                   'دورك في القبض',
                   style: TextStyle(fontWeight: FontWeight.w700),
                 ),
@@ -661,7 +657,7 @@ class _AddJam3eyaSheetState extends State<_AddJam3eyaSheet> {
                   _monthsCount,
                   (i) => DropdownMenuItem(
                     value: i + 1,
-                    child: Text(
+                    child: AppText(
                       'الشهر ${i + 1} (${fmtMonth(DateTime(_startYear, _startMonth + i))})',
                     ),
                   ),
@@ -670,19 +666,19 @@ class _AddJam3eyaSheetState extends State<_AddJam3eyaSheet> {
               ),
             ],
           ),
-          const SizedBox(height: 10),
+          SizedBox(height: 10),
           Container(
-            padding: const EdgeInsets.all(14),
+            padding: EdgeInsets.all(14),
             decoration: BoxDecoration(
               color: AppColors.gold.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(14),
             ),
-            child: Text(
+            child: AppText(
               monthly > 0
                   ? 'هتدفع ${fmtMoney(monthly)} كل شهر لمدة $_monthsCount شهر، وتقبض ${fmtMoney(monthly * _monthsCount)} في ${fmtMonth(DateTime(_startYear, _startMonth + _receiveIndex.clamp(1, _monthsCount) - 1))} 💰'
                   : 'اكتب القسط الشهري ونشوف هتقبض كام وإمتى',
               textAlign: TextAlign.center,
-              style: const TextStyle(
+              style: TextStyle(
                 fontWeight: FontWeight.w700,
                 color: AppColors.emeraldDark,
                 fontSize: 13.5,
@@ -690,18 +686,18 @@ class _AddJam3eyaSheetState extends State<_AddJam3eyaSheet> {
             ),
           ),
           if (_error != null) ...[
-            const SizedBox(height: 8),
-            Text(
+            SizedBox(height: 8),
+            AppText(
               _error!,
               textAlign: TextAlign.center,
-              style: const TextStyle(color: AppColors.expense),
+              style: TextStyle(color: AppColors.expense),
             ),
           ],
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           FilledButton(
             onPressed: _save,
             style: FilledButton.styleFrom(backgroundColor: AppColors.gold),
-            child: const Text(
+            child: AppText(
               'سجل الجمعية',
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
             ),

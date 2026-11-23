@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../store.dart';
+import '../settings.dart';
+import 'settings_screen.dart';
 import 'debts_screen.dart';
 import 'home_screen.dart';
 import 'jam3eyat_screen.dart';
@@ -26,6 +28,7 @@ class _HomeShellState extends State<HomeShell> {
       DebtsScreen(store: store),
       Jam3eyatScreen(store: store),
       StatsScreen(store: store),
+      SettingsScreen(store: store),
     ];
     return AnimatedBuilder(
       animation: store,
@@ -34,26 +37,31 @@ class _HomeShellState extends State<HomeShell> {
         bottomNavigationBar: NavigationBar(
           selectedIndex: _index,
           onDestinationSelected: (i) => setState(() => _index = i),
-          destinations: const [
+          destinations: [
             NavigationDestination(
               icon: Icon(Icons.home_outlined),
               selectedIcon: Icon(Icons.home),
-              label: 'الرئيسية',
+              label: AppSettings.instance.isEnglish ? 'Home' : 'الرئيسية',
             ),
             NavigationDestination(
               icon: Icon(Icons.handshake_outlined),
               selectedIcon: Icon(Icons.handshake),
-              label: 'سلف ودين',
+              label: AppSettings.instance.isEnglish ? 'Debts' : 'سلف ودين',
             ),
             NavigationDestination(
               icon: Icon(Icons.groups_outlined),
               selectedIcon: Icon(Icons.groups),
-              label: 'جمعيات',
+              label: AppSettings.instance.isEnglish ? 'Groups' : 'جمعيات',
             ),
             NavigationDestination(
               icon: Icon(Icons.insights_outlined),
               selectedIcon: Icon(Icons.insights),
-              label: 'الإحصائيات',
+              label: AppSettings.instance.isEnglish ? 'Stats' : 'الإحصائيات',
+            ),
+            NavigationDestination(
+              icon: Icon(Icons.settings_outlined),
+              selectedIcon: Icon(Icons.settings),
+              label: AppSettings.instance.isEnglish ? 'Settings' : 'الإعدادات',
             ),
           ],
         ),
