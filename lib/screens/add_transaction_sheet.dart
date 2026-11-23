@@ -145,7 +145,7 @@ class _AddTransactionSheetState extends State<_AddTransactionSheet> {
           Center(
             child: Container(
               decoration: BoxDecoration(
-                color: Color(0xFFF1F4F3),
+                color: Theme.of(context).inputDecorationTheme.fillColor,
                 borderRadius: BorderRadius.circular(14),
               ),
               padding: EdgeInsets.all(4),
@@ -279,13 +279,13 @@ class _TypeButton extends StatelessWidget {
         duration: Duration(milliseconds: 180),
         padding: EdgeInsets.symmetric(horizontal: 28, vertical: 10),
         decoration: BoxDecoration(
-          color: selected ? color : Colors.transparent,
+          color: selected ? color : Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.circular(11),
         ),
         child: AppText(
           label,
           style: TextStyle(
-            color: selected ? Colors.white : AppColors.muted,
+            color: selected ? Colors.white : AppColors.ink,
             fontWeight: FontWeight.w700,
           ),
         ),

@@ -378,7 +378,7 @@ class _Jam3eyaDetails extends StatelessWidget {
                         ? AppColors.emerald
                         : isReceive
                         ? AppColors.gold.withValues(alpha: 0.15)
-                        : Color(0xFFF1F4F3),
+                        : Theme.of(context).inputDecorationTheme.fillColor,
                     borderRadius: BorderRadius.circular(12),
                     border: Border.all(
                       color: isReceive
@@ -419,7 +419,7 @@ class _Jam3eyaDetails extends StatelessWidget {
                           fontSize: 10.5,
                           color: paid
                               ? Colors.white.withValues(alpha: 0.9)
-                              : AppColors.muted,
+                              : AppColors.ink,
                         ),
                       ),
                     ],

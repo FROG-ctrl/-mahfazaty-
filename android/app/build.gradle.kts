@@ -57,6 +57,12 @@ android {
         }
     }
 
+    packaging {
+        jniLibs {
+            useLegacyPackaging = true
+        }
+    }
+
     buildTypes {
         release {
             // R8 needs more memory than the build sandbox has; the app is small.

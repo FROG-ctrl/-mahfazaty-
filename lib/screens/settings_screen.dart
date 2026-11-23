@@ -246,7 +246,7 @@ class SettingsScreen extends StatelessWidget {
           SizedBox(height: 20),
           Center(
             child: Text(
-              en ? 'Mahfazaty · 1.5.0' : 'محفظتي · 1.5.0',
+              en ? 'Mahfazaty · 1.5.1' : 'محفظتي · 1.5.1',
               style: Theme.of(context).textTheme.bodySmall,
             ),
           ),

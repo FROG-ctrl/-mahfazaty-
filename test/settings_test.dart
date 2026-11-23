@@ -55,6 +55,21 @@ void main() {
       home: Scaffold(body: child),
     ),
   );
+  test('unselected control text contrasts with palette surfaces', () {
+    for (final id in AppSettings.themeIds) {
+      AppSettings.instance.themeId = id;
+      for (final bg in [
+        AppTheme.light.inputDecorationTheme.fillColor!,
+        AppTheme.light.colorScheme.surface,
+      ]) {
+        final fg = Color.alphaBlend(AppColors.ink, bg);
+        final a = fg.computeLuminance();
+        final b = bg.computeLuminance();
+        final ratio = (a > b ? (a + .05) / (b + .05) : (b + .05) / (a + .05));
+        expect(ratio, greaterThanOrEqualTo(4.5), reason: id);
+      }
+    }
+  });
   testWidgets('settings theme tap and language selection work', (tester) async {
     tester.view.physicalSize = const Size(390, 844);
     tester.view.devicePixelRatio = 1;
