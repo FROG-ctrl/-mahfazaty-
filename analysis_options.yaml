@@ -1,0 +1,10 @@
+include: package:flutter_lints/flutter.yaml
+
+analyzer:
+  errors:
+    # Flutter 3.50 نقل Material لمكتبة جديدة، لكن الكود متعمد يفضل على
+    # material.dart عشان يشتغل على كل نسخ فلاتر الحالية
+    deprecated_member_use: ignore
+  exclude:
+    - build/**
+    - android/**
