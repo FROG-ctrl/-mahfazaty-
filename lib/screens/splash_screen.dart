@@ -3,9 +3,12 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
+import '../auth/auth_service.dart';
 import '../store.dart';
 import '../theme.dart';
 import 'home_shell.dart';
+import 'login_screen.dart';
+import 'onboarding_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key, required this.store});
@@ -35,11 +38,23 @@ class _SplashScreenState extends State<SplashScreen>
 
   void _go() {
     if (!mounted) return;
+    _decide();
+  }
+
+  Future<void> _decide() async {
+    final seen = await OnboardingScreen.hasSeen();
+    if (!mounted) return;
+    final auth = AuthService.instance;
+    final Widget dest = !seen
+        ? OnboardingScreen(store: widget.store)
+        : (auth.isReady && !auth.isSignedIn)
+        ? LoginScreen(store: widget.store)
+        : HomeShell(store: widget.store);
     Navigator.of(context).pushReplacement(
       PageRouteBuilder<void>(
         transitionDuration: const Duration(milliseconds: 450),
-        pageBuilder: (_, __, ___) => HomeShell(store: widget.store),
-        transitionsBuilder: (_, a, __, child) =>
+        pageBuilder: (_, _, _) => dest,
+        transitionsBuilder: (_, a, _, child) =>
             FadeTransition(opacity: a, child: child),
       ),
     );

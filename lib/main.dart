@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
+import 'auth/auth_service.dart';
 import 'screens/splash_screen.dart';
 import 'store.dart';
 import 'theme.dart';
@@ -11,6 +12,7 @@ Future<void> main() async {
   await initializeDateFormatting('ar');
   final store = WalletStore();
   await store.load();
+  await AuthService.instance.init();
   runApp(MahfazatyApp(store: store));
 }
 

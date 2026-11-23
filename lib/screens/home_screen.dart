@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../auth/auth_service.dart';
 import '../models.dart';
 import '../store.dart';
 import '../theme.dart';
@@ -7,11 +8,47 @@ import '../utils.dart';
 import '../widgets/charts.dart';
 import '../widgets/common.dart';
 import 'add_transaction_sheet.dart';
+import 'login_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key, required this.store});
 
   final WalletStore store;
+
+  Future<void> _onAuthTap(BuildContext context) async {
+    final auth = AuthService.instance;
+    if (!auth.isSignedIn) {
+      await Navigator.of(context).push(
+        MaterialPageRoute<void>(builder: (_) => LoginScreen(store: store)),
+      );
+      return;
+    }
+    final sure = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('تسجيل الخروج؟'),
+        content: const Text('بياناتك المحفوظة على الموبايل هتفضل زي ما هي.'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: const Text('إلغاء'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            child: const Text('خروج'),
+          ),
+        ],
+      ),
+    );
+    if (sure == true) {
+      await auth.signOut();
+      if (!context.mounted) return;
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute<void>(builder: (_) => LoginScreen(store: store)),
+        (_) => false,
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,10 +64,24 @@ class HomeScreen extends StatelessWidget {
                   style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800),
                 ),
               ),
-              Icon(
-                Icons.account_balance_wallet_outlined,
-                color: Colors.grey[700],
-              ),
+              if (AuthService.instance.isReady)
+                IconButton(
+                  tooltip: AuthService.instance.isSignedIn
+                      ? 'تسجيل الخروج'
+                      : 'تسجيل الدخول',
+                  onPressed: () => _onAuthTap(context),
+                  icon: Icon(
+                    AuthService.instance.isSignedIn
+                        ? Icons.logout
+                        : Icons.person_outline,
+                    color: Colors.grey[700],
+                  ),
+                )
+              else
+                Icon(
+                  Icons.account_balance_wallet_outlined,
+                  color: Colors.grey[700],
+                ),
             ],
           ),
           const SizedBox(height: 12),

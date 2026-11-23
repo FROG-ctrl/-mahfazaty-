@@ -1,7 +1,7 @@
 name: mahfazaty
 description: "محفظتي - مصاريفك وسلفك وجمعياتك في مكان واحد"
 publish_to: 'none'
-version: 1.0.0+1
+version: 1.1.0+2
 
 environment:
   sdk: ^3.9.0
@@ -15,11 +15,14 @@ dependencies:
   lottie: ^3.3.1
   shared_preferences: ^2.3.0
   intl: any
+  firebase_core: ^5.2.0
+  firebase_auth: ^7.1.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^5.0.0
+  flutter_launcher_icons: ^0.14.4
 
 flutter:
   uses-material-design: true
@@ -37,3 +40,10 @@ flutter:
           weight: 700
         - asset: assets/fonts/Cairo-ExtraBold.ttf
           weight: 800
+
+flutter_launcher_icons:
+  android: true
+  ios: false
+  image_path: "assets/icon/icon.png"
+  adaptive_icon_background: "#047D65"
+  adaptive_icon_foreground: "assets/icon/icon_foreground.png"
